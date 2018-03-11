@@ -83,11 +83,11 @@ private:
 public:
     explicit PairPElement(T *t) : t(t) {}
 
-    bool operator()(std::pair<S, T> pair) {
+    bool operator()(std::pair<S, T*> pair) {
         return (pair.second == t);
     }
 
-    bool operator()(std::pair<T, S> pair) {
+    bool operator()(std::pair<T*, S> pair) {
         return (pair.first == t);
     }
 };
