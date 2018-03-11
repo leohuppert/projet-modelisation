@@ -3,4 +3,4 @@ project(projet_modelisation)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(projet_modelisation main.cpp modele/PElement.h helper/Erreur.h helper/Erreur.cpp modele/AElement.h modele/GElement.h modele/Sommet.h modele/Arete.h modele/Graphe.h)
+add_executable(projet_modelisation main.cpp modele/PElement.h helper/Erreur.h helper/Erreur.cpp modele/AElement.h modele/GElement.h modele/Sommet.h modele/Arete.h modele/Graphe.h GprParser.h)
