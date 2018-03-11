@@ -4,7 +4,7 @@
 #include <utility>
 #include "PElement.h"
 #include "Sommet.h"
-#include "Arete.h"
+#include "Arc.h"
 
 template<typename S, typename T>
 class Graphe {
@@ -13,7 +13,7 @@ protected:
 
 public:
     PElement<Sommet<T>> *lSommets;
-    PElement<Arete<S, T>> *lAretes;
+    PElement<Arc<S, T>> *lArcs;
 
 private:
     Sommet<T> *creeSommet1(const int clef, const T &info);
@@ -29,15 +29,15 @@ public:
     Sommet<T> *creeSommet(const T &info) { return creeSommet1(prochaineClef++, info); }
 
 private:
-    Arete<S, T> *creeArete1(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin);
+    Arc<S, T> *creeArete1(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin);
 
-    Arete<S, T> *creeArete(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin) {
+    Arc<S, T> *creeArete(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin) {
         majProchaineClef(clef);
         return creeArete1(clef, info, debut, fin);
     }
 
 public:
-    Arete<S, T> *creeArete(const S &info, Sommet<T> *debut, Sommet<T> *fin) {
+    Arc<S, T> *creeArete(const S &info, Sommet<T> *debut, Sommet<T> *fin) {
         return creeArete1(prochaineClef++, info, debut, fin);
     }
 
@@ -47,7 +47,7 @@ private:
     void effaceTout();
 
 public:
-    Graphe() : prochaineClef(0), lSommets(nullptr), lAretes(nullptr) {}
+    Graphe() : prochaineClef(0), lSommets(nullptr), lArcs(nullptr) {}
 
     Graphe(const Graphe<S, T> &graphe) : Graphe() { this->copie(graphe); }
 
@@ -61,15 +61,15 @@ public:
 
     int nombreSommets() const { return PElement<Sommet<T> >::taille(lSommets); }
 
-    int nombreAretes() const { return PElement<Arete<S, T> >::taille(lAretes); }
+    int nombreAretes() const { return PElement<Arc<S, T> >::taille(lArcs); }
 
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *adjacences(const Sommet<T> *sommet) const;
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *adjacences(const Sommet<T> *sommet) const;
 
-    PElement<Arete<S, T> > *aretesAdjacentes(const Sommet<T> *sommet) const;
+    PElement<Arc<S, T> > *aretesAdjacentes(const Sommet<T> *sommet) const;
 
     PElement<Sommet<T> > *voisins(const Sommet<T> *sommet) const;
 
-    Arete<S, T> *getAreteParSommets(const Sommet<T> *s1, const Sommet<T> *s2) const;
+    Arc<S, T> *getAreteParSommets(const Sommet<T> *s1, const Sommet<T> *s2) const;
 
     explicit operator std::string() const;
 
@@ -92,14 +92,14 @@ Sommet<T> *Graphe<S, T>::creeSommet1(const int clef, const T &info) {
 }
 
 template<typename S, typename T>
-Arete<S, T> *Graphe<S, T>::creeArete1(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin) {
+Arc<S, T> *Graphe<S, T>::creeArete1(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin) {
     // ici tester que les 2 sommets sont bien existants dans le graphe
     if (!PElement<Sommet<T> >::appartient(debut, lSommets)) throw Erreur("début d'arête non défini");
     if (!PElement<Sommet<T> >::appartient(fin, lSommets)) throw Erreur("fin d'arête non définie");
 
-    auto nouvelleArete = new Arete<S, T>(clef, info, debut, fin);
+    auto nouvelleArete = new Arc<S, T>(clef, info, debut, fin);
 
-    lAretes = new PElement<Arete<S, T> >(nouvelleArete, lAretes);
+    lArcs = new PElement<Arc<S, T> >(nouvelleArete, lArcs);
 
     return nouvelleArete;
 }
@@ -123,9 +123,9 @@ void Graphe<S, T>::copie(const Graphe<S, T> &graphe) {
         this->creeSommet(sommet->clef, sommet->v);
     }
 
-    const PElement<Arete<S, T>> *pA;
-    for (pA = graphe.lAretes; pA; pA = pA->s) {
-        const Arete<S, T> *a = pA->v;
+    const PElement<Arc<S, T>> *pA;
+    for (pA = graphe.lArcs; pA; pA = pA->s) {
+        const Arc<S, T> *a = pA->v;
         Sommet<T> *d, *f;
         PElement<Sommet<T> > *p;
 
@@ -143,64 +143,64 @@ void Graphe<S, T>::copie(const Graphe<S, T> &graphe) {
 
 template<typename S, typename T>
 void Graphe<S, T>::effaceTout() {
-    PElement<Arete<S, T>>::efface2(this->lAretes);
+    PElement<Arc<S, T>>::efface2(this->lArcs);
     PElement<Sommet<T> >::efface2(this->lSommets);
     this->prochaineClef = 0;
 }
 
 template<typename S, typename T>
-PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *Graphe<S, T>::adjacences(const Sommet<T> *sommet) const {
-    const PElement<Arete<S, T> > *l;
+PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *Graphe<S, T>::adjacences(const Sommet<T> *sommet) const {
+    const PElement<Arc<S, T> > *l;
 
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *r;
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *r;
 
-    for (l = lAretes, r = NULL; l; l = l->s)
+    for (l = lArcs, r = NULL; l; l = l->s)
 
         if (sommet == l->v->debut)
-            r = new PElement<std::pair<Sommet<T> *, Arete<S, T> *> >
-                    (new std::pair<Sommet<T> *, Arete<S, T> *>(l->v->fin, l->v), r);
+            r = new PElement<std::pair<Sommet<T> *, Arc<S, T> *> >
+                    (new std::pair<Sommet<T> *, Arc<S, T> *>(l->v->fin, l->v), r);
         else if (sommet == l->v->fin)
-            r = new PElement<std::pair<Sommet<T> *, Arete<S, T> *> >
-                    (new std::pair<Sommet<T> *, Arete<S, T> *>(l->v->debut, l->v), r);
+            r = new PElement<std::pair<Sommet<T> *, Arc<S, T> *> >
+                    (new std::pair<Sommet<T> *, Arc<S, T> *>(l->v->debut, l->v), r);
 
     return r;
 }
 
 template<typename S, typename T>
-PElement<Arete<S, T> > *Graphe<S, T>::aretesAdjacentes(const Sommet<T> *sommet) const {
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *ladj = this->adjacences(sommet);
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *l;
+PElement<Arc<S, T> > *Graphe<S, T>::aretesAdjacentes(const Sommet<T> *sommet) const {
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *ladj = this->adjacences(sommet);
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *l;
 
-    PElement<Arete<S, T> > *r;
+    PElement<Arc<S, T> > *r;
 
     for (l = ladj, r = NULL; l; l = l->s)
-        r = new PElement<Arete<S, T> >(l->v->second, r);
+        r = new PElement<Arc<S, T> >(l->v->second, r);
 
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> >::efface2(ladj);
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> >::efface2(ladj);
 
     return r;
 }
 
 template<typename S, typename T>
 PElement<Sommet<T> > *Graphe<S, T>::voisins(const Sommet<T> *sommet) const {
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *ladj = this->adjacences(sommet);
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> > *l;
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *ladj = this->adjacences(sommet);
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> > *l;
 
     PElement<Sommet<T> > *r;
 
     for (l = ladj, r = NULL; l; l = l->s)
         r = new PElement<Sommet<T> >(l->v->first, r);
 
-    PElement<std::pair<Sommet<T> *, Arete<S, T> *> >::efface2(ladj);
+    PElement<std::pair<Sommet<T> *, Arc<S, T> *> >::efface2(ladj);
 
     return r;
 }
 
 template<typename S, typename T>
-Arete<S, T> *Graphe<S, T>::getAreteParSommets(const Sommet<T> *s1, const Sommet<T> *s2) const {
-    PElement<Arete<S, T> > *l;
+Arc<S, T> *Graphe<S, T>::getAreteParSommets(const Sommet<T> *s1, const Sommet<T> *s2) const {
+    PElement<Arc<S, T> > *l;
 
-    for (l = this->lAretes; l; l = l->s)
+    for (l = this->lArcs; l; l = l->s)
         if (l->v->estEgal(s1, s2))
             return l->v;
 
@@ -216,9 +216,9 @@ Graphe<S, T>::operator std::string() const {
 
     oss << PElement<Sommet<T> >::toString(lSommets, "", "\n", "\n");
 
-    oss << "nombre d'arêtes = " << this->nombreAretes() << "\n";
+    oss << "nombre d'arcs = " << this->nombreAretes() << "\n";
 
-    oss << PElement<Arete<S, T> >::toString(lAretes, "", "\n", "\n");
+    oss << PElement<Arc<S, T> >::toString(lArcs, "", "\n", "\n");
     oss << ")";
     return oss.str();
 }
@@ -227,8 +227,8 @@ template<typename S, typename T>
 template<typename FENETRE>
 bool Graphe<S, T>::dessineToutesAretes(FENETRE &fenetre) const {
     // On dessine les arêtes
-    PElement<Arete<S, T>> *pA;
-    for (pA = this->lAretes; pA; pA = pA->s)
+    PElement<Arc<S, T>> *pA;
+    for (pA = this->lArcs; pA; pA = pA->s)
         if (!fenetre.dessine(pA->v)) return false;
 
     return true;

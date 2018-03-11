@@ -12,11 +12,11 @@ int main() {
     s1 = g.creeSommet("Sommet 1");
     s2 = g.creeSommet("Sommet 2");
 
-    // Création de 2 Arêtes
-    Arete<std::string, std::string> *a0, *a1;
+    // Création de 2 arcs
+    Arc<std::string, std::string> *a0, *a1;
 
-    a0 = g.creeArete("Arete 0", s0, s1);
-    a1 = g.creeArete("Arete 1", s1, s2);
+    a0 = g.creeArete("Arc 0", s0, s1);
+    a1 = g.creeArete("Arc 1", s1, s2);
 
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
