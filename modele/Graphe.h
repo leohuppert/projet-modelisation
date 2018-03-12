@@ -2,6 +2,8 @@
 #define PROJET_MODELISATION_GRAPHE_H
 
 #include <utility>
+#include <vector>
+#include <algorithm>
 #include "PElement.h"
 #include "Sommet.h"
 #include "Arc.h"
@@ -17,18 +19,23 @@ public:
 
     std::string nom;
 
+    std::vector<Sommet<T> *> sources;
+    std::vector<Sommet<T> *> puits;
+
 private:
-    Sommet<T> *creeSommet1(const int clef, const T &info);
+    Sommet<T> *creeSommet1(const int clef, const T &info, bool source, bool puits);
 
     void majProchaineClef(const int clef) { prochaineClef = std::max(1 + clef, prochaineClef); }
 
-    Sommet<T> *creeSommet(const int clef, const T &info) {
+    Sommet<T> *creeSommet(const int clef, const T &info, bool source, bool puits) {
         majProchaineClef(clef);
-        return creeSommet1(clef, info);
+        return creeSommet1(clef, info, source, puits);
     }
 
 public:
-    Sommet<T> *creeSommet(const T &info) { return creeSommet1(prochaineClef++, info); }
+    Sommet<T> *creeSommet(const T &info, bool source = false, bool puits = false) {
+        return creeSommet1(prochaineClef++, info, source, puits);
+    }
 
 private:
     Arc<S, T> *creeArete1(const int clef, const S &info, Sommet<T> *debut, Sommet<T> *fin);
@@ -86,9 +93,14 @@ public:
 };
 
 template<typename S, typename T>
-Sommet<T> *Graphe<S, T>::creeSommet1(const int clef, const T &info) {
+Sommet<T> *Graphe<S, T>::creeSommet1(const int clef, const T &info, bool source, bool puits) {
     auto *sommetCree = new Sommet<T>(clef, info);
     lSommets = new PElement<Sommet<T> >(sommetCree, lSommets);
+
+    if (source)
+        this->sources.push_back(sommetCree);
+    else if (puits)
+        this->puits.push_back(sommetCree);
 
     return sommetCree;
 }
@@ -122,7 +134,12 @@ void Graphe<S, T>::copie(const Graphe<S, T> &graphe) {
 
     for (pS = graphe.lSommets; pS; pS = pS->s) {
         const Sommet<T> *sommet = pS->v;
-        this->creeSommet(sommet->clef, sommet->v);
+        //this->creeSommet(sommet->clef, sommet->v);
+
+        bool source = std::find(graphe.sources.begin(), graphe.sources.end(), sommet) != graphe.sources.end();
+        bool puits = std::find(graphe.puits.begin(), graphe.puits.end(), sommet) != graphe.puits.end();
+
+        this->creeSommet(sommet->clef, sommet->v, source, puits);
     }
 
     const PElement<Arc<S, T>> *pA;
@@ -217,6 +234,17 @@ Graphe<S, T>::operator std::string() const {
     std::ostringstream oss;
     oss << "Graphe( \n";
     oss << "nom: " << nom << std::endl;
+
+    oss << "Sources : ";
+    for (auto const &value: this->sources)
+        oss << "Sommet clef " << value->clef << "; ";
+    oss << std::endl;
+
+    oss << "Puits : ";
+    for (auto const &value: this->puits)
+        oss << "Sommet clef " << value->clef << "; ";
+    oss << std::endl;
+
     oss << "prochaine clef = " << this->prochaineClef << std::endl;
     oss << "nombre de sommets = " << this->nombreSommets() << "\n";
 
