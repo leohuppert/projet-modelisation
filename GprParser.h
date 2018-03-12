@@ -49,7 +49,11 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
     oss << input->nom;
 
     std::ofstream file;
-    file.open("../graphe.gpr");
+
+    std::ostringstream nomFichier;
+    nomFichier << "../" << input->nom << ".gpr";
+
+    file.open(nomFichier.str());
     file << oss.str();
 
 
