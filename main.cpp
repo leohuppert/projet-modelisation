@@ -2,6 +2,7 @@
 #include "modele/Graphe.h"
 #include "InfoSommet.h"
 #include "InfoArc.h"
+#include "GprParser.h"
 
 int main() {
     // Création graphe vide
@@ -22,6 +23,8 @@ int main() {
 
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
+
+    std::string res = GprParser::genererInstance(&g);
 
     return 0;
 }
