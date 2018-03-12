@@ -5,6 +5,14 @@
 #include "GprParser.h"
 
 int main() {
+    Graphe<InfoArc, InfoSommet> *g;
+
+    g = GprParser::genererGraphe("../Graphe1.gpr");
+
+    return 0;
+}
+
+int main1() {
     // Création graphe vide
     Graphe<InfoArc, InfoSommet> g("Graphe1");
 

@@ -10,18 +10,16 @@
 
 class GprParser {
 public:
-    template<typename S, typename T>
-    static const std::string genererInstance(Graphe<S, T> *input);
+    static const std::string genererInstance(Graphe<InfoArc, InfoSommet> *input);
 
-    template<typename S, typename T>
-    static Graphe<S, T> *genererGraphe(const char *input);
+    static Graphe<InfoArc, InfoSommet> *genererGraphe(const char *input);
 };
 
-template<>
 const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input) {
     std::ostringstream oss;
 
-    oss << "#Instance " << input->nom << " à " << input->nombreSommets() << " sommets et " << input->nombreAretes() << " arcs" << std::endl;
+    oss << "#Instance " << input->nom << " à " << input->nombreSommets() << " sommets et " << input->nombreAretes()
+        << " arcs" << std::endl;
     oss << "Ressource 1" << std::endl;
     oss << std::endl;
 
@@ -31,7 +29,7 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
     for (ls = input->lSommets; ls; ls = ls->s) {
         oss << ls->v->v.getNom() << " " << ls->v->v.getBorneInferieure() << " " << ls->v->v.getBorneSuperieure()
-             << std::endl;
+            << std::endl;
     }
 
     oss << std::endl;
@@ -45,7 +43,8 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
     // Puits
     oss << "puits" << std::endl;
     for (auto const &value : input->puits)
-        oss << value->v.getNom() << " " << value->v.getBorneInferieure() << " " << value->v.getBorneSuperieure() << std::endl;
+        oss << value->v.getNom() << " " << value->v.getBorneInferieure() << " " << value->v.getBorneSuperieure()
+            << std::endl;
     oss << std::endl;
 
     oss << "sectionArcs" << std::endl;
@@ -54,13 +53,14 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
     for (la = input->lArcs; la; la = la->s) {
         oss << la->v->v.getNom() << " " << la->v->debut->v.getNom() << " " << la->v->fin->v.getNom() << " "
-             << la->v->v.getCout() << " " << la->v->v.getTemps() << std::endl;
+            << la->v->v.getCout() << " " << la->v->v.getTemps() << std::endl;
     }
 
     oss << std::endl;
 
     oss << "sectionGraphe" << std::endl;
-    oss << input->nom << " " << input->sources.front()->v.getNom() << " " << input->puits.front()->v.getNom() << std::endl;
+    oss << input->nom << " " << input->sources.front()->v.getNom() << " " << input->puits.front()->v.getNom()
+        << std::endl;
 
     // Création du fichier
     std::ofstream file;
@@ -73,6 +73,24 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
 
     return oss.str();
+}
+
+Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
+    // Ouverture du fichier
+    std::ifstream ifs;
+
+    ifs.open(input, std::ifstream::in);
+
+    auto c = static_cast<char>(ifs.get());
+
+    while (ifs.good()) {
+        std::cout << c;
+        c = static_cast<char>(ifs.get());
+    }
+
+    ifs.close();
+
+    return nullptr;
 }
 
 #endif //PROJET_MODELISATION_GPRPARSER_H
