@@ -15,6 +15,8 @@ public:
     PElement<Sommet<T>> *lSommets;
     PElement<Arc<S, T>> *lArcs;
 
+    std::string nom;
+
 private:
     Sommet<T> *creeSommet1(const int clef, const T &info);
 
@@ -47,7 +49,7 @@ private:
     void effaceTout();
 
 public:
-    Graphe() : prochaineClef(0), lSommets(nullptr), lArcs(nullptr) {}
+    Graphe(const std::string &nom = "graphe") : prochaineClef(0), lSommets(nullptr), lArcs(nullptr), nom(nom) {}
 
     Graphe(const Graphe<S, T> &graphe) : Graphe() { this->copie(graphe); }
 
@@ -138,6 +140,9 @@ void Graphe<S, T>::copie(const Graphe<S, T> &graphe) {
         f = p->v;
 
         this->creeArete(a->clef, a->v, d, f);
+
+        // Nom
+        this->nom = graphe.nom;
     }
 }
 
@@ -211,6 +216,7 @@ template<typename S, typename T>
 Graphe<S, T>::operator std::string() const {
     std::ostringstream oss;
     oss << "Graphe( \n";
+    oss << "nom: " << nom << std::endl;
     oss << "prochaine clef = " << this->prochaineClef << std::endl;
     oss << "nombre de sommets = " << this->nombreSommets() << "\n";
 

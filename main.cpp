@@ -6,7 +6,7 @@
 
 int main() {
     // Création graphe vide
-    Graphe<InfoArc, InfoSommet> g;
+    Graphe<InfoArc, InfoSommet> g("Graphe1");
 
     // Création de 3 sommets
     Sommet<InfoSommet> *s0, *s1, *s2;
@@ -25,6 +25,11 @@ int main() {
     std::cout << g << std::endl;
 
     std::string res = GprParser::genererInstance(&g);
+
+    // Test Copie
+    Graphe<InfoArc, InfoSommet> g2(g);
+
+    std::cout << g2 << std::endl;
 
     return 0;
 }
