@@ -2,6 +2,7 @@
 #define PROJET_MODELISATION_GPRPARSER_H
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string>
 #include "modele/Graphe.h"
@@ -87,13 +88,17 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
                 // Lecture de tous les sommets
                 std::cout << "Lecture des sommets" << std::endl;
 
-                char *nomSommet = nullptr;
+                std::string nomSommet;
                 int borneInf, borneSup;
 
+                std::stringstream in;
+
                 while (getline(ifs, line) && (!line.empty())) {
-                    // fonctionne pas
-                    sscanf(line.c_str(), "%s %d %d", nomSommet, &borneInf, &borneSup);
-                    std::cout << "nomSommet = " << static_cast <const void *> (nomSommet) << " binf = " << borneInf << " bsup = " << borneSup << std::endl;
+                    in = std::stringstream(line);
+
+                    in >> nomSommet >> borneInf >> borneSup;
+                    std::cout << "nomSommet = " << nomSommet << " binf = " << borneInf
+                              << " bsup = " << borneSup << std::endl;
                 }
             }
         }
