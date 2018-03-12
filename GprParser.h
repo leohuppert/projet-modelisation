@@ -77,18 +77,31 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
 Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
     // Ouverture du fichier
-    std::ifstream ifs;
+    std::ifstream ifs(input);
+    std::string line;
 
-    ifs.open(input, std::ifstream::in);
+    if (ifs.is_open()) {
+        while (getline(ifs, line)) {
+            // Partie sommets
+            if (line == "sectionSommets") {
+                // Lecture de tous les sommets
+                std::cout << "Lecture des sommets" << std::endl;
 
-    auto c = static_cast<char>(ifs.get());
+                char *nomSommet = nullptr;
+                int borneInf, borneSup;
 
-    while (ifs.good()) {
-        std::cout << c;
-        c = static_cast<char>(ifs.get());
+                while (getline(ifs, line) && (!line.empty())) {
+                    // fonctionne pas
+                    sscanf(line.c_str(), "%s %d %d", nomSommet, &borneInf, &borneSup);
+                    std::cout << "nomSommet = " << static_cast <const void *> (nomSommet) << " binf = " << borneInf << " bsup = " << borneSup << std::endl;
+                }
+            }
+        }
+
+        ifs.close();
+    } else {
+        throw Erreur("Impossible d'ouvrir le fichier");
     }
-
-    ifs.close();
 
     return nullptr;
 }
