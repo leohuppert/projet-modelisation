@@ -18,36 +18,42 @@ public:
 
 template<>
 const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input) {
-    std::ofstream file;
+    std::ostringstream oss;
 
-    file.open("../graphe.gpr");
+    oss << "#Instance " << input->nom << " à " << input->nombreSommets() << " sommets et " << input->nombreAretes() << " arcs\n";
+    oss << "Ressource 1\n";
+    oss << "\n";
 
-    file << "#Instance Graphe à " << input->nombreSommets() << " sommets et " << input->nombreAretes() << " arcs\n";
-    file << "Ressource 1\n";
-    file << "\n";
-
-    file << "sectionSommets\n";
+    oss << "sectionSommets\n";
 
     PElement<Sommet<InfoSommet>> *ls;
 
     for (ls = input->lSommets; ls; ls = ls->s) {
-        file << ls->v->v.getNom() << " " << ls->v->v.getBorneInferieure() << " " << ls->v->v.getBorneSuperieure()
+        oss << ls->v->v.getNom() << " " << ls->v->v.getBorneInferieure() << " " << ls->v->v.getBorneSuperieure()
              << "\n";
     }
 
-    file << "\n";
-    file << "sectionArcs\n";
+    oss << "\n";
+    oss << "sectionArcs\n";
 
     PElement<Arc<InfoArc, InfoSommet>> *la;
 
     for (la = input->lArcs; la; la = la->s) {
-        file << la->v->v.getNom() << " " << la->v->debut->v.getNom() << " " << la->v->fin->v.getNom() << " "
+        oss << la->v->v.getNom() << " " << la->v->debut->v.getNom() << " " << la->v->fin->v.getNom() << " "
              << la->v->v.getCout() << " " << la->v->v.getTemps() << "\n";
     }
 
+    oss << "\n";
+
+    oss << "sectionGraphe\n";
+    oss << input->nom;
+
+    std::ofstream file;
+    file.open("../graphe.gpr");
+    file << oss.str();
 
 
-    return "ok";
+    return oss.str();
 }
 
 #endif //PROJET_MODELISATION_GPRPARSER_H

@@ -24,12 +24,14 @@ int main() {
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
 
-    std::string res = GprParser::genererInstance(&g);
-
     // Test Copie
     Graphe<InfoArc, InfoSommet> g2(g);
 
+    std::cout << "Copie de g" << std::endl;
     std::cout << g2 << std::endl;
+
+    std::string res = GprParser::genererInstance(&g);
+    std::cout << "Génération .gpr" << std::endl << res << std::endl;
 
     return 0;
 }
