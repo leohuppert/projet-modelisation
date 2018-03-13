@@ -3,11 +3,14 @@
 #include "InfoSommet.h"
 #include "InfoArc.h"
 #include "GprParser.h"
+#include "OutilsGraphe.h"
 
 int main() {
     Graphe<InfoArc, InfoSommet> *g;
 
     g = GprParser::genererGraphe("../Graphe1.gpr");
+
+    std::cout << *g << std::endl;
 
     return 0;
 }

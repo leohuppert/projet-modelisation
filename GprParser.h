@@ -77,12 +77,15 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 }
 
 Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
+    Graphe<InfoArc, InfoSommet> *graphe = new Graphe<InfoArc, InfoSommet>();
+
     // Ouverture du fichier
     std::ifstream ifs(input);
     std::string line;
 
     if (ifs.is_open()) {
         while (getline(ifs, line)) {
+
             // Partie sommets
             if (line == "sectionSommets") {
                 // Lecture de tous les sommets
