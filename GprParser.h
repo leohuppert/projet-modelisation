@@ -8,6 +8,7 @@
 #include "modele/Graphe.h"
 #include "InfoArc.h"
 #include "InfoSommet.h"
+#include "OutilsGraphe.h"
 
 class GprParser {
 public:
@@ -82,6 +83,7 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
     // Ouverture du fichier
     std::ifstream ifs(input);
     std::string line;
+    std::stringstream in;
 
     if (ifs.is_open()) {
         while (getline(ifs, line)) {
@@ -94,14 +96,55 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
                 std::string nomSommet;
                 int borneInf, borneSup;
 
-                std::stringstream in;
+                while (getline(ifs, line) && (!line.empty())) {
+                    in = std::stringstream(line);
+                    in >> nomSommet >> borneInf >> borneSup;
+
+                    graphe->creeSommet(InfoSommet(nomSommet, borneInf, borneSup));
+                }
+            } else if (line == "sources" || line == "source") {
+                // Ajout de la/des source(s)
+                std::string nomSommet;
 
                 while (getline(ifs, line) && (!line.empty())) {
                     in = std::stringstream(line);
+                    in >> nomSommet;
 
-                    in >> nomSommet >> borneInf >> borneSup;
-                    std::cout << "nomSommet = " << nomSommet << " binf = " << borneInf
-                              << " bsup = " << borneSup << std::endl;
+                    graphe->sources.push_back(OutilsGraphe::getSommetParNom(nomSommet, graphe));
+                }
+            } else if (line == "puits") {
+                // Ajout du/des puits
+                std::string nomSommet;
+
+                while (getline(ifs, line) && (!line.empty())) {
+                    in = std::stringstream(line);
+                    in >> nomSommet;
+
+                    graphe->puits.push_back(OutilsGraphe::getSommetParNom(nomSommet, graphe));
+                }
+            } else if (line == "sectionArcs") {
+                // Ajout des arcs
+
+                std::string nomArc, nomSommetDeb, nomSommetFin;
+                int cout, temps;
+
+                while (getline(ifs, line) && (!line.empty())) {
+                    in = std::stringstream(line);
+                    in >> nomArc >> nomSommetDeb >> nomSommetFin >> cout >> temps;
+
+                    graphe->creeArete(InfoArc(nomArc, cout, temps), OutilsGraphe::getSommetParNom(nomSommetDeb, graphe),
+                                      OutilsGraphe::getSommetParNom(nomSommetFin, graphe));
+                }
+            } else if (line == "sectionGraphe") {
+
+                // On lit le nom du graphe
+                std::string nom;
+
+                while (getline(ifs, line) && (!line.empty())) {
+                    in = std::stringstream(line);
+                    in >> nom;
+
+                    graphe->nom = nom;
                 }
             }
         }
@@ -111,7 +154,7 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
         throw Erreur("Impossible d'ouvrir le fichier");
     }
 
-    return nullptr;
+    return graphe;
 }
 
 #endif //PROJET_MODELISATION_GPRPARSER_H

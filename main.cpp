@@ -3,19 +3,8 @@
 #include "InfoSommet.h"
 #include "InfoArc.h"
 #include "GprParser.h"
-#include "OutilsGraphe.h"
 
 int main() {
-    Graphe<InfoArc, InfoSommet> *g;
-
-    g = GprParser::genererGraphe("../Graphe1.gpr");
-
-    std::cout << *g << std::endl;
-
-    return 0;
-}
-
-int main1() {
     // Création graphe vide
     Graphe<InfoArc, InfoSommet> g("Graphe1");
 
@@ -47,6 +36,12 @@ int main1() {
 
     std::string res = GprParser::genererInstance(&g);
     std::cout << "Génération .gpr" << std::endl << res << std::endl;
+
+    std::cout << "Lecture fichier gpr" << std::endl;
+
+    Graphe<InfoArc, InfoSommet> *g3;
+    g3 = GprParser::genererGraphe("../Graphe1.gpr");
+    std::cout << *g3 << std::endl;
 
     return 0;
 }
