@@ -10,3 +10,8 @@ Sommet<InfoSommet> *OutilsGraphe::getSommetParNom(const std::string &nom, Graphe
 
     return nullptr;
 }
+
+template<typename T>
+PElement<Sommet<T>> OutilsGraphe::getSuccesseurs(const Sommet<T> *sommet) {
+    return PElement<Sommet<T>>(nullptr, nullptr);
+}
