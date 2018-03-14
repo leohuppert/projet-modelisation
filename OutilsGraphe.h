@@ -19,12 +19,43 @@ public:
 
     /**
      * Retourne une liste des successeurs du sommet donné
+     * @tparam S
      * @tparam T
      * @param sommet
-     * @return PElement<Sommet<T>>
+     * @param graphe
+     * @return PElement<Sommet<T>> *
      */
-    template<typename T>
-    static PElement<Sommet<T>> getSuccesseurs(const Sommet<T> *sommet);
+    template<typename S,typename T>
+    static PElement<Sommet<T>> *getSuccesseurs(const Sommet<T> *sommet, const Graphe<S, T> *graphe) {
+        const PElement<Arc<S, T> > *l;
+        PElement<Sommet<T>> *s;
+
+        for (l = graphe->lArcs, s = NULL; l; l = l->s)
+            if (sommet == l->v->debut)
+                s = new PElement<Sommet<T>>(l->v->fin, s);
+
+        return s;
+    }
+
+    /**
+     * Retourne une liste des prédécesseurs du sommet donné
+     * @tparam S
+     * @tparam T
+     * @param sommet
+     * @param graphe
+     * @return PElement<Sommet<T>> *
+     */
+    template<typename S,typename T>
+    static PElement<Sommet<T>> *getPredecesseurs(const Sommet<T> *sommet, const Graphe<S, T> *graphe) {
+        const PElement<Arc<S, T> > *l;
+        PElement<Sommet<T>> *s;
+
+        for (l = graphe->lArcs, s = NULL; l; l = l->s)
+            if (sommet == l->v->fin)
+                s = new PElement<Sommet<T>>(l->v->debut, s);
+
+        return s;
+    }
 
     /**
      * DFS (Depth-first Search)

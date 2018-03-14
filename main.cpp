@@ -43,5 +43,10 @@ int main() {
     g3 = GprParser::genererGraphe("../Graphe1.gpr");
     std::cout << *g3 << std::endl;
 
+    std::cout << "Prédécesseurs : " << std::endl;
+    std::cout << OutilsGraphe::getPredecesseurs<InfoArc,InfoSommet>(s1, &g) << std::endl;
+    std::cout << "Successeurs : " << std::endl;
+    std::cout << OutilsGraphe::getSuccesseurs<InfoArc,InfoSommet>(s1, &g) << std::endl;
+
     return 0;
 }
