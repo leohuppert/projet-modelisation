@@ -29,7 +29,7 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
     PElement<Sommet<InfoSommet>> *ls;
 
-    for (ls = input->lSommets; ls; ls = ls->s) {
+    for (ls = inverse(input->lSommets); ls; ls = ls->s) {
         oss << ls->v->v.getNom() << " " << ls->v->v.getBorneInferieure() << " " << ls->v->v.getBorneSuperieure()
             << std::endl;
     }
@@ -53,7 +53,7 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
 
     PElement<Arc<InfoArc, InfoSommet>> *la;
 
-    for (la = input->lArcs; la; la = la->s) {
+    for (la = inverse(input->lArcs); la; la = la->s) {
         oss << la->v->v.getNom() << " " << la->v->debut->v.getNom() << " " << la->v->fin->v.getNom() << " "
             << la->v->v.getCout() << " " << la->v->v.getTemps() << std::endl;
     }

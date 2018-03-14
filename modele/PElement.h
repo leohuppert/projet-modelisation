@@ -245,10 +245,21 @@ void tri(PElement<T> *&p, bool (*estPlusPetitOuEgal)(const T *a1, const T *a2)) 
     }
 }
 
+template<typename T>
+PElement<T> *inverse(const PElement<T> *pElement) {
+    const PElement<T> *pElement1;
+    PElement<T> *pElement2 = nullptr;
+
+    for (pElement1 = pElement; pElement1; pElement1 = pElement1->s) {
+        pElement2 = new PElement<T>(pElement1->v, pElement2);
+    }
+
+    return pElement2;
+}
 
 template<typename T>
-PElement<T> * getRandomFrom(const PElement<T> *pElement) {
-    PElement<T> * pElement1;
+PElement<T> *getRandomFrom(const PElement<T> *pElement) {
+    PElement<T> *pElement1;
     // Seed generator (remplace time(NULL))
     std::random_device rd;
 
