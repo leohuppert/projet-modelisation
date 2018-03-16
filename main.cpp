@@ -48,5 +48,7 @@ int main() {
     std::cout << "Successeurs : " << std::endl;
     std::cout << OutilsGraphe::getSuccesseurs<InfoArc,InfoSommet>(s1, &g) << std::endl;
 
+    OutilsGraphe::dfs(&g);
+
     return 0;
 }
