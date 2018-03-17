@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <utility>
+#include "InfoDijkstra.h"
 
 class InfoSommet {
 private:
@@ -12,8 +13,13 @@ private:
     int borneInferieure, borneSuperieure;
 
 public:
-    InfoSommet(std::string nom, int bInf, int bSup) : nom(std::move(nom)), borneInferieure(bInf),
-                                                      borneSuperieure(bSup) {}
+    /**
+     * Infos relatives à l'algorithme de Dijkstra
+     */
+    InfoDijkstra infoDijkstra;
+
+    InfoSommet(std::string nom, int bInf, int bSup, InfoDijkstra infoDijkstra1 = InfoDijkstra()) :
+            nom(std::move(nom)), borneInferieure(bInf), borneSuperieure(bSup), infoDijkstra(infoDijkstra1) {}
 
     std::string getNom() const { return nom; }
 

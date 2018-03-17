@@ -52,3 +52,54 @@ void OutilsGraphe::dfsUtils(int sommet, std::vector<std::pair<Sommet<InfoSommet>
         }
     }
 }
+
+void OutilsGraphe::dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<InfoSommet> *depart) {
+    std::cout << "ALGORITHME DIJKSTRA" << std::endl;
+
+    PElement<Sommet<InfoSommet>> *l;
+    PElement<Sommet<InfoSommet>> *ouverts;
+
+    // Parcours de tous les sommets du graphe => Etat: LIBRE, Père: null
+    for (l = graphe->lSommets; l; l = l->s) {
+        l->v->v.infoDijkstra.etat = LIBRE;
+        l->v->v.infoDijkstra.pere = nullptr;
+    }
+
+    depart->v.infoDijkstra.c = 0;
+    depart->v.infoDijkstra.pere = nullptr;
+
+    ouverts = new PElement<Sommet<InfoSommet>>(depart, nullptr);
+    depart->v.infoDijkstra.etat = OUVERT;
+
+    while (ouverts) {
+        Sommet<InfoSommet> *s = PElement<Sommet<InfoSommet>>::depiler(ouverts);
+        s->v.infoDijkstra.etat = FERME;
+
+        // Successeurs TODO: liste pair<Sommet, double> double => coût de l'arc s->v
+        PElement<Sommet<InfoSommet>> *successeurs = OutilsGraphe::getSuccesseurs(s, graphe);
+        PElement<Sommet<InfoSommet>> *l;
+
+        for (l = successeurs; l; l = l->s) {
+            Sommet<InfoSommet> *v = l->v;
+
+            double nouveauCout = l->v->v.infoDijkstra.c + graphe->getAreteParSommets(s, v)->v.getCout();
+
+            if (v->v.infoDijkstra.etat == LIBRE) {
+                v->v.infoDijkstra.pere = s;
+                v->v.infoDijkstra.c = nouveauCout;
+                PElement<Sommet<InfoSommet>>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal);
+                v->v.infoDijkstra.etat = OUVERT;
+            } else {
+                if (nouveauCout < v->v.infoDijkstra.c) {
+                    if (v->v.infoDijkstra.etat == OUVERT)
+                        PElement<Sommet<InfoSommet>>::retire(v, ouverts);
+
+                    v->v.infoDijkstra.pere = s;
+                    v->v.infoDijkstra.c = nouveauCout;
+                    PElement<Sommet<InfoSommet>>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal);
+                    v->v.infoDijkstra.etat = OUVERT;
+                }
+            }
+        }
+    }
+}

@@ -64,6 +64,13 @@ public:
      */
     static void dfs(const Graphe<InfoArc, InfoSommet> *graphe);
 
+    /**
+     * Algorithme de Dijkstra
+     * @param graphe
+     * @param depart
+     */
+    static void dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<InfoSommet> *depart);
+
 private:
 
     /**
@@ -73,6 +80,10 @@ private:
      */
     static void dfsUtils(int sommet, std::vector<std::pair<Sommet<InfoSommet> *, bool>> &visite,
                          const Graphe<InfoArc, InfoSommet> *graphe);
+
+    static bool estPlusPetitOuEgal(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
+        return s1->v.infoDijkstra.c <= s2->v.infoDijkstra.c;
+    }
 };
 
 template<typename S, typename T>
@@ -83,11 +94,11 @@ private:
 public:
     explicit PairPElement(T *t) : t(t) {}
 
-    bool operator()(std::pair<S, T*> pair) {
+    bool operator()(std::pair<S, T *> pair) {
         return (pair.second == t);
     }
 
-    bool operator()(std::pair<T*, S> pair) {
+    bool operator()(std::pair<T *, S> pair) {
         return (pair.first == t);
     }
 };

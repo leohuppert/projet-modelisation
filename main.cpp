@@ -4,6 +4,24 @@
 #include "InfoArc.h"
 #include "GprParser.h"
 
+PElement<Sommet<InfoSommet>> *chemin(Sommet<InfoSommet> *cible, PElement<Sommet<InfoSommet>> *&debut) {
+    if (!cible) {
+        debut = nullptr;
+
+        return nullptr;
+    } else if (!cible->v.infoDijkstra.pere) {
+        debut = new PElement<Sommet<InfoSommet>>(cible, nullptr);
+
+        return debut;
+    } else {
+        PElement<Sommet<InfoSommet>> *d = chemin((Sommet<InfoSommet> *&)
+                                                         cible->v.infoDijkstra.pere, debut);
+        d->s = new PElement<Sommet<InfoSommet>>(cible, nullptr);
+
+        return d->s;
+    }
+}
+
 int main() {
     // Création graphe vide
     Graphe<InfoArc, InfoSommet> g("Graphe1");
@@ -18,16 +36,19 @@ int main() {
     s4 = g.creeSommet(InfoSommet("s4", 0, 8), false, true);
 
     // Création de 2 arcs
-    Arc<InfoArc, InfoSommet> *a0, *a1, *a2, *a3;
+    Arc<InfoArc, InfoSommet> *a0, *a1, *a2, *a3, *a4, *a5;
 
     a0 = g.creeArete(InfoArc("a0", 12, 5), s0, s1);
     a1 = g.creeArete(InfoArc("a1", 6, 23), s1, s2);
     a2 = g.creeArete(InfoArc("a2", 8, 2), s0, s3);
     a3 = g.creeArete(InfoArc("a3", 8, 27), s3, s4);
+    a4 = g.creeArete(InfoArc("a4", 1, 27), s2, s3);
+    a5 = g.creeArete(InfoArc("a5", 2, 27), s1, s4);
 
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
 
+    /*
     // Test Copie
     Graphe<InfoArc, InfoSommet> g2(g);
 
@@ -49,6 +70,25 @@ int main() {
     std::cout << OutilsGraphe::getSuccesseurs<InfoArc,InfoSommet>(s1, &g) << std::endl;
 
     OutilsGraphe::dfs(&g);
+     */
+
+    // Dijkstra
+    OutilsGraphe::dijkstra(&g, s0);
+
+
+    // Meilleur Chemin de s0 à s4
+    Sommet<InfoSommet> *s = OutilsGraphe::getSommetParNom("s4", &g);
+    PElement<Sommet<InfoSommet>> *liste;
+    chemin(s, liste);
+
+    std::cout << "Chemin de s0 à s4" << std::endl;
+
+    for (; liste; liste = liste->s) {
+        if (!liste->s)
+            std::cout << liste->v->v.getNom();
+        else
+            std::cout << liste->v->v.getNom() << " -> ";
+    }
 
     return 0;
 }
