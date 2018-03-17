@@ -21,11 +21,11 @@ int main() {
     Arc<InfoArc, InfoSommet> *a0, *a1, *a2, *a3, *a4, *a5;
 
     a0 = g.creeArete(InfoArc("a0", 12, 5), s0, s1);
-    a1 = g.creeArete(InfoArc("a1", 6, 23), s1, s2);
+    a1 = g.creeArete(InfoArc("a1", 6, 2), s1, s2);
     a2 = g.creeArete(InfoArc("a2", 8, 2), s0, s3);
-    a3 = g.creeArete(InfoArc("a3", 8, 27), s3, s4);
-    a4 = g.creeArete(InfoArc("a4", 1, 27), s2, s3);
-    a5 = g.creeArete(InfoArc("a5", 23, 27), s1, s4);
+    a3 = g.creeArete(InfoArc("a3", 8, 8), s3, s4);
+    a4 = g.creeArete(InfoArc("a4", 1, 3), s2, s3);
+    a5 = g.creeArete(InfoArc("a5", 2, 6), s1, s4);
 
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
@@ -55,15 +55,13 @@ int main() {
      */
 
     // Meilleur Chemin de s0 à s4
-    Sommet<InfoSommet> *ss0 = OutilsGraphe::getSommetParNom("s1", &g);
-    Sommet<InfoSommet> *ss4 = OutilsGraphe::getSommetParNom("s4", &g);
-    PElement<Sommet<InfoSommet>> *pcc = OutilsGraphe::plusCourtChemin(&g, ss0, ss4);
+    PElement<Sommet<InfoSommet>> *pcc = OutilsGraphe::plusCourtChemin(&g, s0, s4);
 
     std::cout << "Chemin de s0 à s4" << std::endl;
 
     for (; pcc; pcc = pcc->s) {
         if (!pcc->s)
-            std::cout << pcc->v->v.getNom();
+            std::cout << pcc->v->v.getNom() << " - Coût : " << pcc->v->v.infoDijkstra.c;
         else
             std::cout << pcc->v->v.getNom() << " -> ";
     }

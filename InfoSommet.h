@@ -31,6 +31,7 @@ public:
         os << "InfoSommet [ ";
         os << "nom: " << infoSommet.nom << "; borne inférieure: " << infoSommet.borneInferieure;
         os << "; borne supérieure: " << infoSommet.borneSuperieure;
+        os << " InfoDijkstra [ " << infoSommet.infoDijkstra << " ]";
         os << " ]";
 
         return os;

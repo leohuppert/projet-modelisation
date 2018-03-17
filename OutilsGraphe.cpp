@@ -77,18 +77,32 @@ void OutilsGraphe::dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<In
         PElement<Sommet<InfoSommet>> *successeurs = OutilsGraphe::getSuccesseurs(s, graphe);
         PElement<Sommet<InfoSommet>> *l;
 
+        std::cout << "Sommet : " << s->v.getNom() << std::endl;
+
         for (l = successeurs; l; l = l->s) {
             Sommet<InfoSommet> *v = l->v;
 
-            double nouveauCout = l->v->v.infoDijkstra.c + graphe->getAreteParSommets(s, v)->v.getCout();
+            std::cout << "voisin : " << v->v.getNom() << std::endl;
+
+            double nouveauCout = s->v.infoDijkstra.c + graphe->getAreteParSommets(s, v)->v.getCout();
+
+            std::cout << "cout de l'arete " << graphe->getAreteParSommets(s, v)->v.getNom() << " : "
+                      << graphe->getAreteParSommets(s, v)->v.getCout() << std::endl;
+
+            std::cout << "nv coût : " << nouveauCout << std::endl;
 
             if (v->v.infoDijkstra.etat == LIBRE) {
+                std::cout << v->v.getNom() << " est libre" << std::endl;
+
                 v->v.infoDijkstra.pere = s;
                 v->v.infoDijkstra.c = nouveauCout;
                 PElement<Sommet<InfoSommet>>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal);
                 v->v.infoDijkstra.etat = OUVERT;
             } else {
                 if (nouveauCout < v->v.infoDijkstra.c) {
+                    std::cout << v->v.getNom() << " pas libre et nouveau cout meilleur : " << nouveauCout << " < "
+                              << v->v.infoDijkstra.c << std::endl;
+
                     if (v->v.infoDijkstra.etat == OUVERT)
                         PElement<Sommet<InfoSommet>>::retire(v, ouverts);
 
@@ -98,6 +112,8 @@ void OutilsGraphe::dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<In
                     v->v.infoDijkstra.etat = OUVERT;
                 }
             }
+
+            std::cout << std::endl;
         }
     }
 }
