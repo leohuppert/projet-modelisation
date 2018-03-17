@@ -54,8 +54,6 @@ void OutilsGraphe::dfsUtils(int sommet, std::vector<std::pair<Sommet<InfoSommet>
 }
 
 void OutilsGraphe::dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<InfoSommet> *depart) {
-    std::cout << "ALGORITHME DIJKSTRA" << std::endl;
-
     PElement<Sommet<InfoSommet>> *l;
     PElement<Sommet<InfoSommet>> *ouverts;
 
@@ -102,4 +100,15 @@ void OutilsGraphe::dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<In
             }
         }
     }
+}
+
+PElement<Sommet<InfoSommet>> *
+OutilsGraphe::plusCourtChemin(const Graphe<InfoArc, InfoSommet> *g, const Sommet<InfoSommet> *depart,
+                              const Sommet<InfoSommet> *cible) {
+    PElement<Sommet<InfoSommet>> *l;
+
+    dijkstra(g, const_cast<Sommet<InfoSommet> *>(depart));
+    chemin(const_cast<Sommet<InfoSommet> *>(cible), l);
+
+    return l;
 }

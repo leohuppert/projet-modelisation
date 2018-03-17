@@ -71,6 +71,16 @@ public:
      */
     static void dijkstra(const Graphe<InfoArc, InfoSommet> *graphe, Sommet<InfoSommet> *depart);
 
+    /**
+     * Utilise Dijkstra et renvoie un plus court chemin
+     * @param depart
+     * @param cible
+     * @return
+     */
+    static PElement<Sommet<InfoSommet>> *
+    plusCourtChemin(const Graphe<InfoArc, InfoSommet> *g, const Sommet<InfoSommet> *depart,
+                    const Sommet<InfoSommet> *cible);
+
 private:
 
     /**
@@ -83,6 +93,30 @@ private:
 
     static bool estPlusPetitOuEgal(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
         return s1->v.infoDijkstra.c <= s2->v.infoDijkstra.c;
+    }
+
+    /**
+     * Construit un chemin
+     * @param cible
+     * @param debut
+     * @return
+     */
+    static PElement<Sommet<InfoSommet>> *chemin(Sommet<InfoSommet> *cible, PElement<Sommet<InfoSommet>> *&debut) {
+        if (!cible) {
+            debut = nullptr;
+
+            return nullptr;
+        } else if (!cible->v.infoDijkstra.pere) {
+            debut = new PElement<Sommet<InfoSommet>>(cible, nullptr);
+
+            return debut;
+        } else {
+            PElement<Sommet<InfoSommet>> *d = chemin((Sommet<InfoSommet> *&)
+                                                             cible->v.infoDijkstra.pere, debut);
+            d->s = new PElement<Sommet<InfoSommet>>(cible, nullptr);
+
+            return d->s;
+        }
     }
 };
 
