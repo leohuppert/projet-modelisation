@@ -90,13 +90,11 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
 
             // Partie sommets
             if (line == "sectionSommets") {
-                // Lecture de tous les sommets
-                std::cout << "Lecture des sommets" << std::endl;
 
                 std::string nomSommet;
                 int borneInf = 0, borneSup = 0;
 
-                while (getline(ifs, line) && (!line.empty())) {
+                while (getline(ifs, line) && (!line.empty()) && line != "sources") {
                     in = std::stringstream(line);
                     in >> nomSommet >> borneInf >> borneSup;
 

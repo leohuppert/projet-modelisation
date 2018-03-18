@@ -1,24 +1,54 @@
 #include <iostream>
+#include <QtWidgets/QApplication>
+
 #include "modele/Graphe.h"
 #include "InfoSommet.h"
 #include "InfoArc.h"
 #include "GprParser.h"
-#include "DessinGraphe.h"
+//#include "DessinGraphe.h"
+#include "Fenetre.h"
 
-int main() {
+int main(int argc, char *argv[]) {
     Graphe<InfoArc, InfoSommet> *g;
-    const char *cheminGPR = "../g4.gpr";
-    std::string sommet1, sommet2;
-    Sommet<InfoSommet> *depart = nullptr, *cible = nullptr;
+    const char *cheminGPR = "../g2.gpr";
 
     g = GprParser::genererGraphe(cheminGPR);
 
     std::cout << *g << std::endl;
 
-    // Dessin
-    DessinGraphe::dessineGraphe(*g, DessinGraphe::SVG);
+    QApplication app(argc, argv);
+    app.setApplicationName("Projet Modélisation");
 
-    PElement<Sommet<InfoSommet>> *listeSommets = inverse(g->lSommets);
+    Fenetre f(g);
+    f.show();
+
+    return app.exec();
+}
+
+int main3(int argc, char *argv[]) {
+    /*Graphe<InfoArc, InfoSommet> *g;
+    const char *cheminGPR = "../g1.gpr";
+    std::string sommet1, sommet2;
+    Sommet<InfoSommet> *depart = nullptr, *cible = nullptr;
+
+    g = GprParser::genererGraphe(cheminGPR);
+
+    //std::cout << *g << std::endl;
+
+    // Dessin
+    // DessinGraphe::dessineGraphe(*g, DessinGraphe::PNG);
+
+    // QT
+
+    QApplication app(argc, argv);
+    app.setApplicationName("Projet Modélisation");
+
+    Fenetre f(g);
+    f.show();
+
+    return app.exec();
+
+    *//*PElement<Sommet<InfoSommet>> *listeSommets = inverse(g->lSommets);
     for (; listeSommets; listeSommets = listeSommets->s)
         std::cout << listeSommets->v->v.getNom() << "; ";
     std::cout << std::endl;
@@ -43,13 +73,13 @@ int main() {
     pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
 
     // Dessin PCC
-    DessinGraphe::dessineGrapheChemin(*g, pcc, DessinGraphe::SVG);
+    DessinGraphe::dessineGrapheChemin(*g, pcc, DessinGraphe::PNG);*/
 
     return 0;
 }
 
 int main1() {
-    // Création graphe vide
+    /*// Création graphe vide
     Graphe<InfoArc, InfoSommet> g("Graphe1");
 
     // Création de 3 sommets
@@ -74,7 +104,7 @@ int main1() {
     std::cout << "Graphe créé : " << std::endl;
     std::cout << g << std::endl;
 
-    /*
+    *//*
     // Test Copie
     Graphe<InfoArc, InfoSommet> g2(g);
 
@@ -96,13 +126,13 @@ int main1() {
     std::cout << OutilsGraphe::getSuccesseurs<InfoArc,InfoSommet>(s1, &g) << std::endl;
 
     OutilsGraphe::dfs(&g);
-     */
+     *//*
 
     // Meilleur Chemin de s0 à s4
     PElement<Sommet<InfoSommet>> *pcc = OutilsGraphe::plusCourtChemin(&g, s0, s4);
 
     // Dessin du plus court chemin
-    DessinGraphe::dessineGrapheChemin(g, pcc);
+    //DessinGraphe::dessineGrapheChemin(g, pcc);
 
     std::cout << "Chemin de s0 à s4" << std::endl;
 
@@ -112,6 +142,8 @@ int main1() {
         else
             std::cout << pcc->v->v.getNom() << " -> ";
     }
+
+    return 0;*/
 
     return 0;
 }
