@@ -14,7 +14,7 @@ int main() {
     std::cout << *g << std::endl;
 
     // Dessin
-    DessinGraphe::dessineGraphe(*g);
+    DessinGraphe::dessineGraphe(*g, DessinGraphe::SVG);
 
     // PCC entre 1er et dernier sommet
     PElement<Sommet<InfoSommet>> *pcc;
@@ -25,7 +25,7 @@ int main() {
     pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
 
     // Dessin PCC
-    DessinGraphe::dessineGrapheChemin(*g, pcc);
+    DessinGraphe::dessineGrapheChemin(*g, pcc, DessinGraphe::SVG);
 
     return 0;
 }

@@ -11,6 +11,9 @@
 
 class DessinGraphe {
 public:
+    static constexpr int PNG = 0;
+    static constexpr int SVG = 1;
+
     /**
      * Génère un fichier .dot utilisé par graphviz
      * @param Graphe g
@@ -32,7 +35,7 @@ public:
      * @param g
      * @return std::string le chemin de l'image créée
      */
-    static const std::string dessineGraphe(const Graphe<InfoArc, InfoSommet> &g);
+    static const std::string dessineGraphe(const Graphe<InfoArc, InfoSommet> &g, const int format);
 
     /**
      * Crée une image PNG à l'aide de Graphviz et met en évidence un chemin
@@ -40,7 +43,25 @@ public:
      * @return std::string le chemin de l'image créée
      */
     static const std::string
-    dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin);
+    dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin, const int format);
+
+private:
+    static const std::string genereSortie(const std::string &chemin, const int format) {
+        std::ostringstream cmd;
+        std::string out = chemin;
+
+        if (format == PNG) {
+            cmd << "dot -Tpng -O " << chemin;
+            out.append(".png");
+        } else if (format == SVG) {
+            cmd << "dot -Tsvg -O " << chemin;
+            out.append(".svg");
+        }
+
+        system(cmd.str().c_str());
+
+        return out;
+    }
 };
 
 const std::string DessinGraphe::genereDot(const Graphe<InfoArc, InfoSommet> &g) {
@@ -71,16 +92,12 @@ const std::string DessinGraphe::genereDot(const Graphe<InfoArc, InfoSommet> &g) 
     return cheminFichier;
 }
 
-const std::string DessinGraphe::dessineGraphe(const Graphe<InfoArc, InfoSommet> &g) {
+const std::string DessinGraphe::dessineGraphe(const Graphe<InfoArc, InfoSommet> &g, const int format = PNG) {
     std::string cheminDot;
-    std::ostringstream cmd;
 
     cheminDot = genereDot(g);
-    cmd << "dot -Tpng -O " << cheminDot;
 
-    system(cmd.str().c_str());
-
-    return cheminDot.append(".png");
+    return genereSortie(cheminDot, format);
 }
 
 const std::string
@@ -123,16 +140,13 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
 }
 
 const std::string
-DessinGraphe::dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin) {
+DessinGraphe::dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin,
+                                  const int format = PNG) {
     std::string cheminDot;
-    std::ostringstream cmd;
 
     cheminDot = genereDotChemin(g, chemin);
-    cmd << "dot -Tpng -O " << cheminDot;
 
-    system(cmd.str().c_str());
-
-    return cheminDot.append(".png");
+    return genereSortie(cheminDot, format);
 }
 
 #endif //PROJET_MODELISATION_DESSINGRAPHE_H
