@@ -127,7 +127,7 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
     }
 
     for (; chemin; chemin = chemin->s)
-        contenu << "  " << chemin->v->v.getNom() << " [color=red];" << std::endl;
+        contenu << "  " << chemin->v->v.getNom() << " [color=red fontcolor=red];" << std::endl;
 
     contenu << "}";
 
