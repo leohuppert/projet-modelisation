@@ -91,6 +91,12 @@ private:
     static void dfsUtils(int sommet, std::vector<std::pair<Sommet<InfoSommet> *, bool>> &visite,
                          const Graphe<InfoArc, InfoSommet> *graphe);
 
+    /**
+     * Utilisée dans l'algorithme de Dijkstra lors de l'insertion d'un sommet dans la file de priorité
+     * @param s1
+     * @param s2
+     * @return
+     */
     static bool estPlusPetitOuEgal(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
         return s1->v.infoDijkstra.c <= s2->v.infoDijkstra.c;
     }
