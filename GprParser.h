@@ -94,7 +94,7 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
                 std::cout << "Lecture des sommets" << std::endl;
 
                 std::string nomSommet;
-                int borneInf, borneSup;
+                int borneInf = 0, borneSup = 0;
 
                 while (getline(ifs, line) && (!line.empty())) {
                     in = std::stringstream(line);
@@ -135,7 +135,7 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
                     graphe->creeArete(InfoArc(nomArc, cout, temps), OutilsGraphe::getSommetParNom(nomSommetDeb, graphe),
                                       OutilsGraphe::getSommetParNom(nomSommetFin, graphe));
                 }
-            } else if (line == "sectionGraphe") {
+            } else if (line == "sectionGraphe" || line == "sectionGraphes") {
 
                 // On lit le nom du graphe
                 std::string nom;

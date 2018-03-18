@@ -6,6 +6,31 @@
 #include "DessinGraphe.h"
 
 int main() {
+    Graphe<InfoArc, InfoSommet> *g;
+    const char *cheminGPR = "../g2.gpr";
+
+    g = GprParser::genererGraphe(cheminGPR);
+
+    std::cout << *g << std::endl;
+
+    // Dessin
+    DessinGraphe::dessineGraphe(*g);
+
+    // PCC entre 1er et dernier sommet
+    PElement<Sommet<InfoSommet>> *pcc;
+    Sommet<InfoSommet> *depart, *cible;
+    depart = OutilsGraphe::getSommetParNom("i1", g);
+    cible = OutilsGraphe::getSommetParNom("i10", g);
+
+    pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
+
+    // Dessin PCC
+    DessinGraphe::dessineGrapheChemin(*g, pcc);
+
+    return 0;
+}
+
+int main1() {
     // Création graphe vide
     Graphe<InfoArc, InfoSommet> g("Graphe1");
 
