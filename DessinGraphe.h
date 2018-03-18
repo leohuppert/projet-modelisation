@@ -115,7 +115,7 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
 
         if (app && (arcs->v->debut == app->v && arcs->v->fin == app->s->v)) {
             contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
-                    << arcs->v->v.getCout() << " color=red];" << std::endl;
+                    << arcs->v->v.getCout() << " color=red fontcolor=red];" << std::endl;
         } else {
             contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
                     << arcs->v->v.getCout() << "];" << std::endl;
