@@ -2,7 +2,8 @@
 *.gpr
 
 # .dot .png
-dot/*
+*.dot
+*.png
 
 # Created by https://www.gitignore.io/api/clion
 

@@ -7,7 +7,7 @@
 
 int main() {
     Graphe<InfoArc, InfoSommet> *g;
-    const char *cheminGPR = "../g2.gpr";
+    const char *cheminGPR = "../g4.gpr";
 
     g = GprParser::genererGraphe(cheminGPR);
 
@@ -19,8 +19,8 @@ int main() {
     // PCC entre 1er et dernier sommet
     PElement<Sommet<InfoSommet>> *pcc;
     Sommet<InfoSommet> *depart, *cible;
-    depart = OutilsGraphe::getSommetParNom("i1", g);
-    cible = OutilsGraphe::getSommetParNom("i10", g);
+    depart = OutilsGraphe::getSommetParNom("i_1", g);
+    cible = OutilsGraphe::getSommetParNom("i_20", g);
 
     pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
 
