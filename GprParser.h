@@ -140,11 +140,13 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
                 // On lit le nom du graphe
                 std::string nom;
 
-                while (getline(ifs, line) && (!line.empty())) {
-                    in = std::stringstream(line);
-                    in >> nom;
+                while (getline(ifs, line)) {
+                    if (!line.empty()) {
+                        in = std::stringstream(line);
+                        in >> nom;
 
-                    graphe->nom = nom;
+                        graphe->nom = nom;
+                    }
                 }
             }
         }
