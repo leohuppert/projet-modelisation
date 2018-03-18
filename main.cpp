@@ -18,6 +18,11 @@ int main() {
     // Dessin
     DessinGraphe::dessineGraphe(*g, DessinGraphe::SVG);
 
+    PElement<Sommet<InfoSommet>> *listeSommets = inverse(g->lSommets);
+    for (; listeSommets; listeSommets = listeSommets->s)
+        std::cout << listeSommets->v->v.getNom() << "; ";
+    std::cout << std::endl;
+
     std::cout << "Recherche de plus court chemin" << std::endl;
 
     do {
