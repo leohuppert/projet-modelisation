@@ -15,7 +15,7 @@ class Fenetre : public QWidget {
     Q_OBJECT
 
 public:
-    Fenetre(Graphe<InfoArc, InfoSommet> *g);
+    explicit Fenetre(Graphe<InfoArc, InfoSommet> *g);
 
 public slots:
     void handleButton();
@@ -33,6 +33,8 @@ private:
     QHBoxLayout *qhBoxLayout;
     QLabel *image;
     QGridLayout *gridLayout;
+
+    QLabel *texte;
 };
 
 

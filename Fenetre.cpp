@@ -21,6 +21,9 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
         listeCible->addItem(listeSommets->v->v.getNom().c_str());
     }
 
+    texte = new QLabel("Recherche de plus court chemin");
+    texte->setFont(QFont("Liberation", 12));
+
     qhBoxLayout = new QHBoxLayout();
     qhBoxLayout->addWidget(lblDepart);
     qhBoxLayout->addWidget(listeDepart);
@@ -34,8 +37,9 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     image->setAlignment(Qt::AlignCenter);
 
     gridLayout = new QGridLayout();
-    gridLayout->addWidget(image, 0, 1);
-    gridLayout->addLayout(qhBoxLayout, 1, 1);
+    gridLayout->addWidget(texte, 0, 1);
+    gridLayout->addWidget(image, 1, 1);
+    gridLayout->addLayout(qhBoxLayout, 2, 1);
 
     setLayout(gridLayout);
 
@@ -58,4 +62,16 @@ void Fenetre::handleButton() {
     imageG = DessinGraphe::dessineGrapheChemin(*graphe, pcc, DessinGraphe::PNG);
 
     image->setPixmap(QPixmap(imageG.c_str()));
+
+    std::ostringstream oss;
+    oss << "Recherche de plus court chemin : ";
+
+    for (; pcc; pcc = pcc->s) {
+        if (!pcc->s)
+            oss << pcc->v->v.getNom() << " - Coût : " << pcc->v->v.infoDijkstra.c;
+        else
+            oss << pcc->v->v.getNom() << " -> ";
+    }
+
+    texte->setText(oss.str().c_str());
 }
