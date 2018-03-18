@@ -58,6 +58,9 @@ int main() {
     // Meilleur Chemin de s0 à s4
     PElement<Sommet<InfoSommet>> *pcc = OutilsGraphe::plusCourtChemin(&g, s0, s4);
 
+    // Dessin du plus court chemin
+    DessinGraphe::dessineGrapheChemin(g, pcc);
+
     std::cout << "Chemin de s0 à s4" << std::endl;
 
     for (; pcc; pcc = pcc->s) {
@@ -66,8 +69,6 @@ int main() {
         else
             std::cout << pcc->v->v.getNom() << " -> ";
     }
-
-    DessinGraphe::dessineGraphe(g);
 
     return 0;
 }
