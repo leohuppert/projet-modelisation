@@ -8,6 +8,8 @@
 int main() {
     Graphe<InfoArc, InfoSommet> *g;
     const char *cheminGPR = "../g4.gpr";
+    std::string sommet1, sommet2;
+    Sommet<InfoSommet> *depart = nullptr, *cible = nullptr;
 
     g = GprParser::genererGraphe(cheminGPR);
 
@@ -16,11 +18,22 @@ int main() {
     // Dessin
     DessinGraphe::dessineGraphe(*g, DessinGraphe::SVG);
 
+    std::cout << "Recherche de plus court chemin" << std::endl;
+
+    do {
+        std::cout << "Choisir le sommet de départ" << std::endl;
+        if (!std::getline(std::cin, sommet1)) return -1;
+
+        depart = OutilsGraphe::getSommetParNom(sommet1, g);
+
+        std::cout << "Choisir le sommet cible" << std::endl;
+        if (!std::getline(std::cin, sommet2)) return -1;
+
+        cible = OutilsGraphe::getSommetParNom(sommet2, g);
+    } while (!depart && !cible);
+
     // PCC entre 1er et dernier sommet
     PElement<Sommet<InfoSommet>> *pcc;
-    Sommet<InfoSommet> *depart, *cible;
-    depart = OutilsGraphe::getSommetParNom("i_3", g);
-    cible = OutilsGraphe::getSommetParNom("i_9", g);
 
     pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
 
