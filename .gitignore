@@ -1,6 +1,9 @@
 # On ignore les fichiers instance .gpr
 *.gpr
 
+# .dot .png
+dot/*
+
 # Created by https://www.gitignore.io/api/clion
 
 ### CLion ###
