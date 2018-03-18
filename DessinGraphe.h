@@ -96,24 +96,11 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
 
     contenu << "digraph " << g.nom << " {" << std::endl;
 
-    /*for (; arcs; arcs = arcs->s) {
-        contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
-                << arcs->v->v.getCout()
-                << "];" << std::endl;
-    }
-
-    for (; chemin; chemin = chemin->s) {
-        contenu << "  " << chemin->v->v.getNom() << " [color=red];" << std::endl;
-
-        if (chemin->s)
-            contenu << "  " << chemin->v->v.getNom() << " -> " << chemin->s->v->v.getNom() << " [color=red];" << std::endl;
-    }*/
-
     for (; arcs; arcs = arcs->s) {
         PElement<Sommet<InfoSommet>> *app;
         app = PElement<Sommet<InfoSommet>>::appartient(arcs->v->debut, chemin);
 
-        if (app && (arcs->v->debut == app->v && arcs->v->fin == app->s->v)) {
+        if (app && app->s && (arcs->v->debut == app->v && arcs->v->fin == app->s->v)) {
             contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
                     << arcs->v->v.getCout() << " color=red fontcolor=red];" << std::endl;
         } else {

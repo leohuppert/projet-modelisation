@@ -19,8 +19,8 @@ int main() {
     // PCC entre 1er et dernier sommet
     PElement<Sommet<InfoSommet>> *pcc;
     Sommet<InfoSommet> *depart, *cible;
-    depart = OutilsGraphe::getSommetParNom("i_1", g);
-    cible = OutilsGraphe::getSommetParNom("i_20", g);
+    depart = OutilsGraphe::getSommetParNom("i_3", g);
+    cible = OutilsGraphe::getSommetParNom("i_9", g);
 
     pcc = OutilsGraphe::plusCourtChemin(g, depart, cible);
 
