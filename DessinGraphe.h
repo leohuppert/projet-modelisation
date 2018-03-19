@@ -103,6 +103,9 @@ const std::string DessinGraphe::genereDot(const Graphe<InfoArc, InfoSommet> &g) 
                 << "]" << std::endl;
     }
 
+    for (auto lSommets = g.lSommets->copie1(g.lSommets); lSommets; lSommets = lSommets->s)
+        contenu << "  " << lSommets->v->v.getNom() << std::endl;
+
     contenu << "}";
 
     // Création du fichier
@@ -149,6 +152,10 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
 
     for (; chemin; chemin = chemin->s)
         contenu << "  " << chemin->v->v.getNom() << " [color=red fontcolor=red];" << std::endl;
+
+    for (auto lSommets = g.lSommets->copie1(g.lSommets); lSommets; lSommets = lSommets->s)
+        if (!PElement<Sommet<InfoSommet>>::appartient(lSommets->v, chemin))
+            contenu << "  " << lSommets->v->v.getNom() << std::endl;
 
     contenu << "}";
 
