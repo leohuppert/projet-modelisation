@@ -31,6 +31,7 @@ public slots:
     void afficherBoutonsGraphe();
 
     void masquerBoutonsGraphe();
+
 private:
     void init();
 

@@ -23,13 +23,6 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     listeCible = new QComboBox();
     bouton = new QPushButton("Lancer");
 
-    /*PElement<Sommet<InfoSommet>> *listeSommets = inverse(graphe->lSommets);
-
-    for (; listeSommets; listeSommets = listeSommets->s) {
-        listeDepart->addItem(listeSommets->v->v.getNom().c_str());
-        listeCible->addItem(listeSommets->v->v.getNom().c_str());
-    }*/
-
     texte = new QLabel();
     texte->setFont(QFont("Liberation", 12));
 
@@ -100,14 +93,6 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     topLayout->addWidget(boutonGpr, Qt::AlignRight);
 
     image = new QLabel();
-    /*std::string cheminImage = DessinGraphe::dessineGraphe(*graphe, DessinGraphe::PNG);
-
-    image->setMaximumSize(1000, 900);
-    image->setPixmap(QPixmap(cheminImage.c_str()));
-    image->setAlignment(Qt::AlignCenter);
-
-    if (image->pixmap()->width() > 1000)
-        image->setScaledContents(true);*/
 
     listeAlgorithmes->setEnabled(false);
     listeDepart->setEnabled(false);
@@ -203,7 +188,7 @@ void Fenetre::choixFichier() {
     }
 }
 
-void Fenetre::afficherBoutonsGraphe(){
+void Fenetre::afficherBoutonsGraphe() {
     boutonAfficher->setVisible(false);
     boutonCreer->setVisible(true);
     valeurMax->setVisible(true);
@@ -216,7 +201,7 @@ void Fenetre::afficherBoutonsGraphe(){
     lblSommets->setVisible(true);
 }
 
-void Fenetre::masquerBoutonsGraphe(){
+void Fenetre::masquerBoutonsGraphe() {
     boutonAfficher->setVisible(true);
     boutonCreer->setVisible(false);
     valeurMax->setVisible(false);
@@ -231,7 +216,7 @@ void Fenetre::masquerBoutonsGraphe(){
 
 void Fenetre::creerUnGraphe() {
     std::string nom = nomFichier->text().toStdString();
-    if (nom == "")
+    if (nom.empty())
         nom = "Graphe";
     int nbSommets = nombreSommets->text().toInt();
     if (nbSommets <= 0)
