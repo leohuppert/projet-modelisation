@@ -13,17 +13,24 @@
 #include "modele/Graphe.h"
 
 class Fenetre : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     explicit Fenetre(Graphe<InfoArc, InfoSommet> *g = nullptr);
 
 public slots:
+
     void handleButton();
+
     void handleEvent();
+
     void choixFichier();
+
     void creerUnGraphe();
 
+    void afficherBoutonsGraphe();
+
+    void masquerBoutonsGraphe();
 private:
     void init();
 
@@ -42,6 +49,7 @@ private:
     QHBoxLayout *qhBoxLayout;
     QHBoxLayout *topLayout;
     QPushButton *boutonGpr;
+    QPushButton *boutonAfficher;
     QPushButton *boutonCreer;
 
     QLabel *lblNom;
