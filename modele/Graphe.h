@@ -22,7 +22,7 @@ public:
     std::vector<Sommet<T> *> sources;
     std::vector<Sommet<T> *> puits;
 
-    static Graphe<S,T> * genererGraphe(const int nbSommet, Graphe<S,T> * g, int valueMax, int valueMin);
+    static Graphe<S, T> *genererGraphe(const int nbSommet, Graphe<S, T> *g, int valueMax, int valueMin);
 
 private:
     Sommet<T> *creeSommet1(const int clef, const T &info, bool source, bool puits);
@@ -95,29 +95,32 @@ public:
 };
 
 template<typename S, typename T>
-Graphe<S, T> *Graphe<S, T>::genererGraphe(const int nbSommet,Graphe<S, T> * g,int  valueMax,int valueMin) {
-    if(valueMax<valueMin)
+Graphe<S, T> *Graphe<S, T>::genererGraphe(const int nbSommet, Graphe<S, T> *g, int valueMax, int valueMin) {
+    if (valueMax < valueMin)
         throw Erreur("Max<Min");
-    if(valueMax<0 || valueMin<0)
+    if (valueMax < 0 || valueMin < 0)
         throw Erreur("Max ou Min <0");
 
     int matrice[nbSommet][nbSommet];
     srand(time(NULL));
-    for(int i=0;i<nbSommet;i++){
-        for(int j=0;j<nbSommet;j++){
-            matrice[i][j]=rand()%2;
+    for (int i = 0; i < nbSommet; i++) {
+        for (int j = 0; j < nbSommet; j++) {
+            if (j != 0 && i != nbSommet - 1)
+                matrice[i][j] = rand() % 2;
+            else
+                matrice[i][j] = 0;
         }
     }
 
     std::vector<Sommet<T> *> listesommmets;
 
-    int max,min;
+    int max, min;
 
     for (int i = 0; i < nbSommet; i++) {
-        bool isSource=true;
-        bool isPuit=true;
-        for(int j=0;j<nbSommet;j++){
-            if(i!=j) {
+        bool isSource = true;
+        bool isPuit = true;
+        for (int j = 0; j < nbSommet; j++) {
+            if (i != j) {
                 if (matrice[i][j] == 1) {
                     isPuit = false;
                 }
@@ -126,10 +129,10 @@ Graphe<S, T> *Graphe<S, T>::genererGraphe(const int nbSommet,Graphe<S, T> * g,in
                 }
             }
         }
-        if(valueMax==0){
-            max=0;
-            min=0;
-        }else {
+        if (valueMax == 0) {
+            max = 0;
+            min = 0;
+        } else {
             max = rand() % (valueMax - valueMin) + valueMin;
             if (max == 0 || (max - valueMin) <= 0) {
                 min = 0;
@@ -137,17 +140,17 @@ Graphe<S, T> *Graphe<S, T>::genererGraphe(const int nbSommet,Graphe<S, T> * g,in
                 min = rand() % (max - valueMin) + valueMin;
             }
         }
-        Sommet<T> * s=g->creeSommet(T(std::to_string(i),max,min),isSource,isPuit);
+        Sommet<T> *s = g->creeSommet(T(std::to_string(i), max, min), isSource, isPuit);
         listesommmets.push_back(s);
     }
 
-    for(int i=0;i<nbSommet;i++){
-        for(int j=0;j<nbSommet;j++){
-            if(i!=j && matrice[i][j]==1){
-                if(valueMax==0){
-                    max=0;
-                    min=0;
-                }else {
+    for (int i = 0; i < nbSommet; i++) {
+        for (int j = 0; j < nbSommet; j++) {
+            if (i != j && matrice[i][j] == 1) {
+                if (valueMax == 0) {
+                    max = 0;
+                    min = 0;
+                } else {
                     max = rand() % (valueMax - valueMin) + valueMin;
                     if (max == 0 || (max - valueMin) <= 0) {
                         min = 0;
@@ -155,7 +158,8 @@ Graphe<S, T> *Graphe<S, T>::genererGraphe(const int nbSommet,Graphe<S, T> * g,in
                         min = rand() % (max - valueMin) + valueMin;
                     }
                 }
-                g->creeArete(S(std::to_string(i)+std::string("vers")+std::to_string(j),max,min),listesommmets.at(i),listesommmets.at(j));
+                g->creeArete(S(std::to_string(i) + std::string("vers") + std::to_string(j), max, min),
+                             listesommmets.at(i), listesommmets.at(j));
             }
         }
     }
