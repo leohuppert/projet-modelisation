@@ -41,11 +41,43 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     qhBoxLayout->addWidget(listeCible);
     qhBoxLayout->addWidget(bouton);
 
+    lblNom = new QLabel("Nom Fichier :");
+    nomFichier=new QLineEdit();
+    nomFichier->setMaximumSize(150, 30);
+
+    lblSommets = new QLabel("Nombre de sommets :");
+    nombreSommets=new QLineEdit();
+    nombreSommets->setMaximumSize(150, 30);
+
+    lblValeurMax = new QLabel("Valuation Max :");
+    valeurMax = new QLineEdit();
+    valeurMax->setMaximumSize(150, 30);
+
+    lblValeurMin = new QLabel("Valuation Min :");
+    valeurMin = new QLineEdit();
+    valeurMin->setMaximumSize(150, 30);
+
     boutonGpr = new QPushButton("Choisir fichier ...");
     boutonGpr->setMaximumSize(150, 30);
 
+    boutonCreer = new QPushButton("Créer un graphe");
+    boutonCreer->setMaximumSize(150, 30);
+
     topLayout = new QHBoxLayout();
     topLayout->addWidget(texte);
+    topLayout->addWidget(lblNom, Qt::AlignRight);
+    topLayout->addWidget(nomFichier, Qt::AlignRight);
+
+    topLayout->addWidget(lblSommets, Qt::AlignRight);
+    topLayout->addWidget(nombreSommets, Qt::AlignRight);
+
+    topLayout->addWidget(lblValeurMax, Qt::AlignRight);
+    topLayout->addWidget(valeurMax, Qt::AlignRight);
+
+    topLayout->addWidget(lblValeurMin, Qt::AlignRight);
+    topLayout->addWidget(valeurMin, Qt::AlignRight);
+
+    topLayout->addWidget(boutonCreer, Qt::AlignRight);
     topLayout->addWidget(boutonGpr, Qt::AlignRight);
 
     image = new QLabel();
@@ -73,6 +105,7 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     QObject::connect(listeAlgorithmes, SIGNAL(currentIndexChanged(int)), this, SLOT(handleEvent()));
     QObject::connect(bouton, SIGNAL(clicked()), this, SLOT(handleButton()));
     QObject::connect(boutonGpr, SIGNAL(clicked()), this, SLOT(choixFichier()));
+    QObject::connect(boutonCreer, SIGNAL(clicked()), this, SLOT(creerUnGraphe()));
 }
 
 
@@ -147,6 +180,29 @@ void Fenetre::choixFichier() {
 
         this->init();
     }
+}
+
+
+void Fenetre::creerUnGraphe() {
+    std::string nom=nomFichier->text().toStdString();
+    if(nom=="")
+        nom="Graphe";
+    int nbSommets=nombreSommets->text().toInt();
+    if(nbSommets<=0)
+        nbSommets=rand()%8+2;
+    int vMax=valeurMax->text().toInt();
+    if(vMax<=0)
+        vMax=100;
+
+    int vMin=valeurMin->text().toInt();
+    if(vMin<=0)
+        vMin=0;
+
+    Graphe<InfoArc, InfoSommet> *g=new Graphe<InfoArc, InfoSommet>(nom);
+    graphe=  Graphe<InfoArc, InfoSommet>::genererGraphe(nbSommets,g,vMax,vMin);
+    GprParser::genererInstance(graphe);
+    this->init();
+
 }
 
 void Fenetre::init() {
