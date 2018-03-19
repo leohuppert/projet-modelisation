@@ -15,13 +15,16 @@ class Fenetre : public QWidget {
     Q_OBJECT
 
 public:
-    explicit Fenetre(Graphe<InfoArc, InfoSommet> *g);
+    explicit Fenetre(Graphe<InfoArc, InfoSommet> *g = nullptr);
 
 public slots:
     void handleButton();
     void handleEvent();
+    void choixFichier();
 
 private:
+    void init();
+
     Graphe<InfoArc, InfoSommet> *graphe;
 
     QPushButton *bouton;
@@ -35,10 +38,14 @@ private:
     QComboBox *listeCible;
 
     QHBoxLayout *qhBoxLayout;
+    QHBoxLayout *topLayout;
+    QPushButton *boutonGpr;
     QLabel *image;
     QGridLayout *gridLayout;
 
     QLabel *texte;
+
+    QVBoxLayout *baseLayout;
 };
 
 

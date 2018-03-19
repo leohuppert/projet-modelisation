@@ -1,7 +1,10 @@
 #include <iostream>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QFileDialog>
 #include "Fenetre.h"
 #include "DessinGraphe.h"
 #include "OutilsGraphe.h"
+#include "GprParser.h"
 
 Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     setBaseSize(800, 600);
@@ -19,12 +22,12 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     listeCible = new QComboBox();
     bouton = new QPushButton("Lancer");
 
-    PElement<Sommet<InfoSommet>> *listeSommets = inverse(graphe->lSommets);
+    /*PElement<Sommet<InfoSommet>> *listeSommets = inverse(graphe->lSommets);
 
     for (; listeSommets; listeSommets = listeSommets->s) {
         listeDepart->addItem(listeSommets->v->v.getNom().c_str());
         listeCible->addItem(listeSommets->v->v.getNom().c_str());
-    }
+    }*/
 
     texte = new QLabel();
     texte->setFont(QFont("Liberation", 12));
@@ -38,18 +41,30 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     qhBoxLayout->addWidget(listeCible);
     qhBoxLayout->addWidget(bouton);
 
+    boutonGpr = new QPushButton("Choisir fichier ...");
+    boutonGpr->setMaximumSize(150, 30);
+
+    topLayout = new QHBoxLayout();
+    topLayout->addWidget(texte);
+    topLayout->addWidget(boutonGpr, Qt::AlignRight);
+
     image = new QLabel();
-    std::string cheminImage = DessinGraphe::dessineGraphe(*graphe, DessinGraphe::PNG);
+    /*std::string cheminImage = DessinGraphe::dessineGraphe(*graphe, DessinGraphe::PNG);
 
     image->setMaximumSize(1000, 900);
     image->setPixmap(QPixmap(cheminImage.c_str()));
     image->setAlignment(Qt::AlignCenter);
 
     if (image->pixmap()->width() > 1000)
-        image->setScaledContents(true);
+        image->setScaledContents(true);*/
+
+    listeAlgorithmes->setEnabled(false);
+    listeDepart->setEnabled(false);
+    listeCible->setEnabled(false);
+    bouton->setEnabled(false);
 
     gridLayout = new QGridLayout();
-    gridLayout->addWidget(texte, 0, 1);
+    gridLayout->addLayout(topLayout, 0, 1);
     gridLayout->addWidget(image, 1, 1);
     gridLayout->addLayout(qhBoxLayout, 2, 1);
 
@@ -57,6 +72,7 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
 
     QObject::connect(listeAlgorithmes, SIGNAL(currentIndexChanged(int)), this, SLOT(handleEvent()));
     QObject::connect(bouton, SIGNAL(clicked()), this, SLOT(handleButton()));
+    QObject::connect(boutonGpr, SIGNAL(clicked()), this, SLOT(choixFichier()));
 }
 
 
@@ -117,4 +133,43 @@ void Fenetre::handleEvent() {
         lblCible->setVisible(false);
         listeCible->setVisible(false);
     }
+}
+
+void Fenetre::choixFichier() {
+    QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Fichier GPR (*.gpr)");
+
+    // On récupère le graphe à partir du fichier gpr
+    Graphe<InfoArc, InfoSommet> *g;
+    g = GprParser::genererGraphe(fichier.toStdString().c_str());
+
+    graphe = g;
+
+    this->init();
+}
+
+void Fenetre::init() {
+    // On vide les listes de sommets
+    listeDepart->clear();
+    listeCible->clear();
+    texte->clear();
+
+    PElement<Sommet<InfoSommet>> *listeSommets = inverse(graphe->lSommets);
+
+    for (; listeSommets; listeSommets = listeSommets->s) {
+        listeDepart->addItem(listeSommets->v->v.getNom().c_str());
+        listeCible->addItem(listeSommets->v->v.getNom().c_str());
+    }
+
+    listeAlgorithmes->setEnabled(true);
+    listeDepart->setEnabled(true);
+    listeCible->setEnabled(true);
+    bouton->setEnabled(true);
+
+    std::string cheminImage = DessinGraphe::dessineGraphe(*graphe, DessinGraphe::PNG);
+
+    image->setMaximumSize(1000, 900);
+    image->setPixmap(QPixmap(cheminImage.c_str()));
+    image->setAlignment(Qt::AlignCenter);
+
+    image->setScaledContents(image->pixmap()->width() > 1000);
 }
