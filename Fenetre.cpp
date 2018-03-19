@@ -40,8 +40,13 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
 
     image = new QLabel();
     std::string cheminImage = DessinGraphe::dessineGraphe(*graphe, DessinGraphe::PNG);
+
+    image->setMaximumSize(1000, 900);
     image->setPixmap(QPixmap(cheminImage.c_str()));
     image->setAlignment(Qt::AlignCenter);
+
+    if (image->pixmap()->width() > 1000)
+        image->setScaledContents(true);
 
     gridLayout = new QGridLayout();
     gridLayout->addWidget(texte, 0, 1);

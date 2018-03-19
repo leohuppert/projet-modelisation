@@ -9,7 +9,7 @@
 int main(int argc, char *argv[]) {
     try {
         Graphe<InfoArc, InfoSommet> *g;
-        const char *cheminGPR = "../g3.gpr";
+        const char *cheminGPR = "../g1.gpr";
 
         g = GprParser::genererGraphe(cheminGPR);
 
