@@ -7,6 +7,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLineEdit>
 #include "InfoArc.h"
 #include "InfoSommet.h"
 #include "modele/Graphe.h"
@@ -21,6 +22,7 @@ public slots:
     void handleButton();
     void handleEvent();
     void choixFichier();
+    void creerUnGraphe();
 
 private:
     void init();
@@ -40,6 +42,20 @@ private:
     QHBoxLayout *qhBoxLayout;
     QHBoxLayout *topLayout;
     QPushButton *boutonGpr;
+    QPushButton *boutonCreer;
+
+    QLabel *lblNom;
+    QLineEdit *nomFichier;
+
+    QLabel *lblSommets;
+    QLineEdit *nombreSommets;
+
+    QLabel *lblValeurMin;
+    QLineEdit *valeurMin;
+
+    QLabel *lblValeurMax;
+    QLineEdit *valeurMax;
+
     QLabel *image;
     QGridLayout *gridLayout;
 

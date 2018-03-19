@@ -24,7 +24,6 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
         << " arcs" << std::endl;
     oss << "Ressource 1" << std::endl;
     oss << std::endl;
-
     oss << "sectionSommets" << std::endl;
 
     PElement<Sommet<InfoSommet>> *ls;
@@ -45,8 +44,7 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
     // Puits
     oss << "puits" << std::endl;
     for (auto const &value : input->puits)
-        oss << value->v.getNom() << " " << value->v.getBorneInferieure() << " " << value->v.getBorneSuperieure()
-            << std::endl;
+        oss << value->v.getNom() << std::endl;
     oss << std::endl;
 
     oss << "sectionArcs" << std::endl;
@@ -61,8 +59,13 @@ const std::string GprParser::genererInstance(Graphe<InfoArc, InfoSommet> *input)
     oss << std::endl;
 
     oss << "sectionGraphe" << std::endl;
-    oss << input->nom << " " << input->sources.front()->v.getNom() << " " << input->puits.front()->v.getNom()
-        << std::endl;
+    oss << input->nom;
+    for (auto const &value : input->sources)
+        oss << " " <<value->v.getNom();
+    for (auto const &value : input->puits)
+        oss << " " <<value->v.getNom();
+    oss << std::endl;
+
 
     // Création du fichier
     std::ofstream file;
