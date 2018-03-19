@@ -169,7 +169,7 @@ DessinGraphe::genereDotArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<
     PElement<Arc<InfoArc, InfoSommet>> *arcs = g.lArcs;
 
     // Chemin du fichier .dot
-    oss << "../dot/" << g.nom << "_pcc.dot";
+    oss << "../dot/" << g.nom << "_dfs.dot";
     cheminFichier = oss.str();
 
     contenu << "digraph " << g.nom << " {" << std::endl;
