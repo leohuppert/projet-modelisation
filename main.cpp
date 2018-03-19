@@ -7,16 +7,20 @@
 #include "Fenetre.h"
 
 int main(int argc, char *argv[]) {
-    Graphe<InfoArc, InfoSommet> *g;
-    const char *cheminGPR = "../g2.gpr";
+    try {
+        Graphe<InfoArc, InfoSommet> *g;
+        const char *cheminGPR = "../g3.gpr";
 
-    g = GprParser::genererGraphe(cheminGPR);
+        g = GprParser::genererGraphe(cheminGPR);
 
-    QApplication app(argc, argv);
-    app.setApplicationName("Projet Modélisation");
+        QApplication app(argc, argv);
+        app.setApplicationName("Projet Modélisation");
 
-    Fenetre f(g);
-    f.show();
+        Fenetre f(g);
+        f.show();
 
-    return app.exec();
+        return app.exec();
+    } catch (const Erreur &e) {
+         std::cerr << e << std::endl;
+    }
 }

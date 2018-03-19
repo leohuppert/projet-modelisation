@@ -151,7 +151,7 @@ Graphe<InfoArc, InfoSommet> *GprParser::genererGraphe(const char *input) {
 
         ifs.close();
     } else {
-        throw Erreur("Impossible d'ouvrir le fichier");
+        throw Erreur("Impossible d'ouvrir le fichier .gpr");
     }
 
     return graphe;
