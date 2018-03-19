@@ -8,6 +8,7 @@
 
 Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     setBaseSize(800, 600);
+    setMaximumSize(800, 600);
 
     graphe = g;
 
@@ -42,11 +43,11 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     qhBoxLayout->addWidget(bouton);
 
     lblNom = new QLabel("Nom Fichier :");
-    nomFichier=new QLineEdit();
+    nomFichier = new QLineEdit();
     nomFichier->setMaximumSize(150, 30);
 
     lblSommets = new QLabel("Nombre de sommets :");
-    nombreSommets=new QLineEdit();
+    nombreSommets = new QLineEdit();
     nombreSommets->setMaximumSize(150, 30);
 
     lblValeurMax = new QLabel("Valuation Max :");
@@ -184,22 +185,22 @@ void Fenetre::choixFichier() {
 
 
 void Fenetre::creerUnGraphe() {
-    std::string nom=nomFichier->text().toStdString();
-    if(nom=="")
-        nom="Graphe";
-    int nbSommets=nombreSommets->text().toInt();
-    if(nbSommets<=0)
-        nbSommets=rand()%8+2;
-    int vMax=valeurMax->text().toInt();
-    if(vMax<=0)
-        vMax=100;
+    std::string nom = nomFichier->text().toStdString();
+    if (nom == "")
+        nom = "Graphe";
+    int nbSommets = nombreSommets->text().toInt();
+    if (nbSommets <= 0)
+        nbSommets = rand() % 8 + 2;
+    int vMax = valeurMax->text().toInt();
+    if (vMax <= 0)
+        vMax = 100;
 
-    int vMin=valeurMin->text().toInt();
-    if(vMin<=0)
-        vMin=0;
+    int vMin = valeurMin->text().toInt();
+    if (vMin <= 0)
+        vMin = 0;
 
-    Graphe<InfoArc, InfoSommet> *g=new Graphe<InfoArc, InfoSommet>(nom);
-    graphe=  Graphe<InfoArc, InfoSommet>::genererGraphe(nbSommets,g,vMax,vMin);
+    Graphe<InfoArc, InfoSommet> *g = new Graphe<InfoArc, InfoSommet>(nom);
+    graphe = Graphe<InfoArc, InfoSommet>::genererGraphe(nbSommets, g, vMax, vMin);
     GprParser::genererInstance(graphe);
     this->init();
 
@@ -229,5 +230,5 @@ void Fenetre::init() {
     image->setPixmap(QPixmap(cheminImage.c_str()));
     image->setAlignment(Qt::AlignCenter);
 
-    image->setScaledContents(image->pixmap()->width() > 1000);
+    image->setScaledContents(image->pixmap()->width() > 800 || image->pixmap()->height() > 600);
 }
