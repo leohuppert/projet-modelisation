@@ -26,7 +26,7 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
         listeCible->addItem(listeSommets->v->v.getNom().c_str());
     }
 
-    texte = new QLabel("Recherche de plus court chemin");
+    texte = new QLabel();
     texte->setFont(QFont("Liberation", 12));
 
     qhBoxLayout = new QHBoxLayout();
