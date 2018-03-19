@@ -177,12 +177,10 @@ DessinGraphe::genereDotArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<
     for (; arcs; arcs = arcs->s) {
         if (arcs->appartient(arcs->v, arbre)) {
             if (!PElement<Sommet<InfoSommet>>::appartient(arcs->v->debut, sommetsArbre)) {
-                contenu << "  " << arcs->v->debut->v.getNom() << " [color=blue fontcolor=blue];" << std::endl;
                 sommetsArbre = new PElement<Sommet<InfoSommet>>(arcs->v->debut, sommetsArbre);
             }
 
             if (!PElement<Sommet<InfoSommet>>::appartient(arcs->v->fin, sommetsArbre)) {
-                contenu << "  " << arcs->v->fin->v.getNom() << " [color=blue fontcolor=blue];" << std::endl;
                 sommetsArbre = new PElement<Sommet<InfoSommet>>(arcs->v->fin, sommetsArbre);
             }
 
@@ -193,6 +191,13 @@ DessinGraphe::genereDotArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<
                     << arcs->v->v.getCout() << "];" << std::endl;
         }
     }
+
+    for (auto lSommets = g.lSommets->copie1(g.lSommets); lSommets; lSommets = lSommets->s)
+        if (!PElement<Sommet<InfoSommet>>::appartient(lSommets->v, sommetsArbre))
+            sommetsArbre = new PElement<Sommet<InfoSommet>>(lSommets->v, sommetsArbre);
+
+    for (; sommetsArbre; sommetsArbre = sommetsArbre->s)
+        contenu << "  " << sommetsArbre->v->v.getNom() << " [color=blue fontcolor=blue];" << std::endl;
 
 
     contenu << "}";

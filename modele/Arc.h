@@ -43,7 +43,7 @@ std::ostream &operator<<(std::ostream &os, const Arc<S, T> &arete) {
 
 template<typename S, typename T>
 bool Arc<S, T>::estEgal(const Sommet<T> *s1, const Sommet<T> *s2) const {
-    return (s1 == debut && s2 == fin) || (s1 == fin && s2 == debut);
+    return s1 == debut && s2 == fin;
 }
 
 #endif //PROJET_MODELISATION_ARETE_H
