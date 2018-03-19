@@ -257,6 +257,14 @@ PElement<T> *inverse(const PElement<T> *pElement) {
     return pElement2;
 }
 
+template <typename T>
+void insertionFin(T *a, PElement<T> *&l) {
+    if(!l)
+        l = new PElement<T>(a, l);
+        else
+        insertionFin(a, l->s);
+}
+
 template<typename T>
 PElement<T> *getRandomFrom(const PElement<T> *pElement) {
     PElement<T> *pElement1;

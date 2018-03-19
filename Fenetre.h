@@ -19,11 +19,15 @@ public:
 
 public slots:
     void handleButton();
+    void handleEvent();
 
 private:
     Graphe<InfoArc, InfoSommet> *graphe;
 
     QPushButton *bouton;
+
+    QLabel *lblAlgorithmes;
+    QComboBox *listeAlgorithmes;
 
     QLabel *lblDepart;
     QComboBox *listeDepart;

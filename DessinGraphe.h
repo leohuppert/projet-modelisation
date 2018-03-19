@@ -31,6 +31,16 @@ public:
     genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin);
 
     /**
+     * Génère un fichier .dot utilisé par graphviz
+     * Met en couleur l'arbre passé
+     * @param g
+     * @param arbre
+     * @return
+     */
+    static const std::string
+    genereDotArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<InfoArc, InfoSommet>> *arbre);
+
+    /**
      * Crée une image PNG à l'aide de Graphviz
      * @param g
      * @return std::string le chemin de l'image créée
@@ -44,6 +54,17 @@ public:
      */
     static const std::string
     dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin, const int format);
+
+    /**
+     * Crée une image PNG à l'aide de Graphviz et met en évidence un arbre
+     * @param g
+     * @param arbre
+     * @param format
+     * @return
+     */
+    static const std::string
+    dessineGrapheArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<InfoArc, InfoSommet>> *arbre,
+                       const int format);
 
 private:
     static const std::string genereSortie(const std::string &chemin, const int format) {
@@ -140,6 +161,51 @@ DessinGraphe::genereDotChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Som
 }
 
 const std::string
+DessinGraphe::genereDotArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<InfoArc, InfoSommet>> *arbre) {
+    std::ostringstream oss, contenu;
+    std::string cheminFichier;
+
+    PElement<Sommet<InfoSommet>> *sommetsArbre = nullptr;
+    PElement<Arc<InfoArc, InfoSommet>> *arcs = g.lArcs;
+
+    // Chemin du fichier .dot
+    oss << "../dot/" << g.nom << "_pcc.dot";
+    cheminFichier = oss.str();
+
+    contenu << "digraph " << g.nom << " {" << std::endl;
+
+    for (; arcs; arcs = arcs->s) {
+        if (arcs->appartient(arcs->v, arbre)) {
+            if (!PElement<Sommet<InfoSommet>>::appartient(arcs->v->debut, sommetsArbre)) {
+                contenu << "  " << arcs->v->debut->v.getNom() << " [color=red fontcolor=red];" << std::endl;
+                sommetsArbre = new PElement<Sommet<InfoSommet>>(arcs->v->debut, sommetsArbre);
+            }
+
+            if (!PElement<Sommet<InfoSommet>>::appartient(arcs->v->fin, sommetsArbre)) {
+                contenu << "  " << arcs->v->fin->v.getNom() << " [color=red fontcolor=red];" << std::endl;
+                sommetsArbre = new PElement<Sommet<InfoSommet>>(arcs->v->fin, sommetsArbre);
+            }
+
+            contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
+                    << arcs->v->v.getCout() << " color=red fontcolor=red];" << std::endl;
+        } else {
+            contenu << "  " << arcs->v->debut->v.getNom() << " -> " << arcs->v->fin->v.getNom() << " [label="
+                    << arcs->v->v.getCout() << "];" << std::endl;
+        }
+    }
+
+
+    contenu << "}";
+
+    // Création du fichier
+    std::ofstream file;
+    file.open(cheminFichier);
+    file << contenu.str();
+
+    return cheminFichier;
+}
+
+const std::string
 DessinGraphe::dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement<Sommet<InfoSommet>> *chemin,
                                   const int format = PNG) {
     std::string cheminDot;
@@ -147,6 +213,16 @@ DessinGraphe::dessineGrapheChemin(const Graphe<InfoArc, InfoSommet> &g, PElement
     cheminDot = genereDotChemin(g, chemin);
 
     return genereSortie(cheminDot, format);
+}
+
+const std::string
+DessinGraphe::dessineGrapheArbre(const Graphe<InfoArc, InfoSommet> &g, PElement<Arc<InfoArc, InfoSommet>> *arbre,
+                                 const int format = PNG) {
+    std::string arbreDot;
+
+    arbreDot = genereDotArbre(g, arbre);
+
+    return genereSortie(arbreDot, format);
 }
 
 #endif //PROJET_MODELISATION_DESSINGRAPHE_H

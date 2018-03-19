@@ -8,6 +8,11 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
 
     graphe = g;
 
+    lblAlgorithmes = new QLabel("Choix d'algorithme à appliquer");
+    listeAlgorithmes = new QComboBox();
+    listeAlgorithmes->addItem("Dijkstra");
+    listeAlgorithmes->addItem("DFS");
+
     lblDepart = new QLabel("Sommet départ");
     lblCible = new QLabel("Sommet cible");
     listeDepart = new QComboBox();
@@ -25,6 +30,8 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     texte->setFont(QFont("Liberation", 12));
 
     qhBoxLayout = new QHBoxLayout();
+    qhBoxLayout->addWidget(lblAlgorithmes);
+    qhBoxLayout->addWidget(listeAlgorithmes);
     qhBoxLayout->addWidget(lblDepart);
     qhBoxLayout->addWidget(listeDepart);
     qhBoxLayout->addWidget(lblCible);
@@ -43,35 +50,66 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
 
     setLayout(gridLayout);
 
+    QObject::connect(listeAlgorithmes, SIGNAL(currentIndexChanged(int)), this, SLOT(handleEvent()));
     QObject::connect(bouton, SIGNAL(clicked()), this, SLOT(handleButton()));
 }
 
+
 void Fenetre::handleButton() {
-    std::string s1, s2, imageG;
+    std::string algo, s1, s2, imageG;
+    std::ostringstream oss;
+
+    algo = listeAlgorithmes->currentText().toStdString();
 
     s1 = listeDepart->currentText().toStdString();
     s2 = listeCible->currentText().toStdString();
 
-    // On lance Dijkstra
-    Sommet<InfoSommet> *depart = OutilsGraphe::getSommetParNom(s1, graphe);
-    Sommet<InfoSommet> *cible = OutilsGraphe::getSommetParNom(s2, graphe);
+    if (algo == "Dijkstra") {
+        // On lance Dijkstra
+        Sommet<InfoSommet> *depart = OutilsGraphe::getSommetParNom(s1, graphe);
+        Sommet<InfoSommet> *cible = OutilsGraphe::getSommetParNom(s2, graphe);
 
-    PElement<Sommet<InfoSommet>> *pcc;
-    pcc = OutilsGraphe::plusCourtChemin(graphe, depart, cible);
+        PElement<Sommet<InfoSommet>> *pcc;
+        pcc = OutilsGraphe::plusCourtChemin(graphe, depart, cible);
 
-    imageG = DessinGraphe::dessineGrapheChemin(*graphe, pcc, DessinGraphe::PNG);
+        imageG = DessinGraphe::dessineGrapheChemin(*graphe, pcc, DessinGraphe::PNG);
+
+        oss << "Recherche de plus court chemin : ";
+        for (; pcc; pcc = pcc->s) {
+            if (!pcc->s)
+                oss << pcc->v->v.getNom() << " - Coût : " << pcc->v->v.infoDijkstra.c;
+            else
+                oss << pcc->v->v.getNom() << " -> ";
+        }
+    } else if (algo == "DFS") {
+        // Test dfs
+        PElement<Arc<InfoArc, InfoSommet>> *dfs;
+        OutilsGraphe::dfs(graphe);
+        OutilsGraphe::arbreCouvrant(graphe, dfs);
+
+        imageG = DessinGraphe::dessineGrapheArbre(*graphe, dfs, DessinGraphe::PNG);
+
+        oss << "Affichage d'un arbre couvrant : ";
+    }
 
     image->setPixmap(QPixmap(imageG.c_str()));
 
-    std::ostringstream oss;
-    oss << "Recherche de plus court chemin : ";
-
-    for (; pcc; pcc = pcc->s) {
-        if (!pcc->s)
-            oss << pcc->v->v.getNom() << " - Coût : " << pcc->v->v.infoDijkstra.c;
-        else
-            oss << pcc->v->v.getNom() << " -> ";
-    }
-
     texte->setText(oss.str().c_str());
+}
+
+void Fenetre::handleEvent() {
+    std::string algo = listeAlgorithmes->currentText().toStdString();
+    texte->clear();
+    if (algo == "Dijkstra") {
+        lblDepart->setVisible(true);
+        listeDepart->setVisible(true);
+        lblCible->setVisible(true);
+        listeCible->setVisible(true);
+
+    } else if (algo == "DFS") {
+        lblDepart->setVisible(false);
+        listeDepart->setVisible(false);
+        lblCible->setVisible(false);
+        listeCible->setVisible(false);
+    }
 }

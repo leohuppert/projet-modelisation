@@ -10,11 +10,11 @@
 
 int main(int argc, char *argv[]) {
     Graphe<InfoArc, InfoSommet> *g;
-    const char *cheminGPR = "../g2.gpr";
+    const char *cheminGPR = "../gpr/data_VRPTW_10.gpr";
 
     g = GprParser::genererGraphe(cheminGPR);
 
-    std::cout << *g << std::endl;
+//    std::cout << *g << std::endl;
 
     QApplication app(argc, argv);
     app.setApplicationName("Projet Modélisation");

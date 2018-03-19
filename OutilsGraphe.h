@@ -92,6 +92,26 @@ private:
                          const Graphe<InfoArc, InfoSommet> *graphe);
 
     /**
+     * Utilisée dans l'algorithme DFS pour le parcours des voisins dans l'ordre des clefs
+     * @param s1
+     * @param s2
+     * @return
+     */
+    static bool estOrdonne(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
+        return s1->clef < s2->clef;
+    }
+
+    /**
+     * Utilisée dans l'algorithme DFS pour le parcours des sommets dans l'ordre des clefs pere
+     * @param s1
+     * @param s2
+     * @return
+     */
+    static bool estOrdonneParents(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
+        return s1->v.infoDijkstra.pere > s2->v.infoDijkstra.pere;
+    }
+
+    /**
      * Utilisée dans l'algorithme de Dijkstra lors de l'insertion d'un sommet dans la file de priorité
      * @param s1
      * @param s2
@@ -123,6 +143,33 @@ private:
 
             return d->s;
         }
+    }
+
+public:
+    /**
+     * Construit un arbre couvrant
+     * @param cible
+     * @param debut
+     * @return
+     */
+    static void arbreCouvrant(Graphe<InfoArc, InfoSommet> *graphe, PElement<Arc<InfoArc, InfoSommet>> *&pElement) {
+        auto lSommets = graphe->lSommets;
+        PElement<Arc<InfoArc, InfoSommet>> *pElement1 = nullptr;
+
+        for (; lSommets; lSommets = lSommets->s) {
+            if (lSommets->v->v.infoDijkstra.pere) {
+                for (auto l = graphe->lSommets; l; l = l->s) {
+                    if (l->v->clef == lSommets->v->v.infoDijkstra.pere->clef) {
+                        pElement1 = new PElement<Arc<InfoArc, InfoSommet>>(
+                                graphe->getAreteParSommets(l->v, lSommets->v),
+                                pElement1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        pElement = inverse(pElement1);
     }
 };
 
