@@ -28,6 +28,9 @@ public slots:
 
     void creerUnGraphe();
 
+    void afficherBoutonsGraphe();
+
+    void masquerBoutonsGraphe();
 private:
     void init();
 
@@ -46,6 +49,7 @@ private:
     QHBoxLayout *qhBoxLayout;
     QHBoxLayout *topLayout;
     QPushButton *boutonGpr;
+    QPushButton *boutonAfficher;
     QPushButton *boutonCreer;
 
     QLabel *lblNom;

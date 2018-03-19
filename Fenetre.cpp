@@ -43,29 +43,46 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     qhBoxLayout->addWidget(bouton);
 
     lblNom = new QLabel("Nom Fichier :");
+    lblNom->setVisible(false);
+
     nomFichier = new QLineEdit();
     nomFichier->setMaximumSize(150, 30);
+    nomFichier->setVisible(false);
 
     lblSommets = new QLabel("Nombre de sommets :");
+    lblSommets->setVisible(false);
+
     nombreSommets = new QLineEdit();
     nombreSommets->setMaximumSize(150, 30);
+    nombreSommets->setVisible(false);
 
     lblValeurMax = new QLabel("Valuation Max :");
+    lblValeurMax->setVisible(false);
+
     valeurMax = new QLineEdit();
     valeurMax->setMaximumSize(150, 30);
+    valeurMax->setVisible(false);
 
     lblValeurMin = new QLabel("Valuation Min :");
+    lblValeurMin->setVisible(false);
+
     valeurMin = new QLineEdit();
     valeurMin->setMaximumSize(150, 30);
+    valeurMin->setVisible(false);
 
     boutonGpr = new QPushButton("Choisir fichier ...");
     boutonGpr->setMaximumSize(150, 30);
 
-    boutonCreer = new QPushButton("Créer un graphe");
+    boutonCreer = new QPushButton("Valider");
     boutonCreer->setMaximumSize(150, 30);
+    boutonCreer->setVisible(false);
+
+    boutonAfficher = new QPushButton("Créer un graphe");
+    boutonAfficher->setMaximumSize(150, 30);
 
     topLayout = new QHBoxLayout();
     topLayout->addWidget(texte);
+
     topLayout->addWidget(lblNom, Qt::AlignRight);
     topLayout->addWidget(nomFichier, Qt::AlignRight);
 
@@ -78,6 +95,7 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     topLayout->addWidget(lblValeurMin, Qt::AlignRight);
     topLayout->addWidget(valeurMin, Qt::AlignRight);
 
+    topLayout->addWidget(boutonAfficher, Qt::AlignRight);
     topLayout->addWidget(boutonCreer, Qt::AlignRight);
     topLayout->addWidget(boutonGpr, Qt::AlignRight);
 
@@ -107,6 +125,7 @@ Fenetre::Fenetre(Graphe<InfoArc, InfoSommet> *g) : QWidget() {
     QObject::connect(bouton, SIGNAL(clicked()), this, SLOT(handleButton()));
     QObject::connect(boutonGpr, SIGNAL(clicked()), this, SLOT(choixFichier()));
     QObject::connect(boutonCreer, SIGNAL(clicked()), this, SLOT(creerUnGraphe()));
+    QObject::connect(boutonAfficher, SIGNAL(clicked()), this, SLOT(afficherBoutonsGraphe()));
 }
 
 
@@ -183,6 +202,31 @@ void Fenetre::choixFichier() {
     }
 }
 
+void Fenetre::afficherBoutonsGraphe(){
+    boutonAfficher->setVisible(false);
+    boutonCreer->setVisible(true);
+    valeurMax->setVisible(true);
+    valeurMin->setVisible(true);
+    nomFichier->setVisible(true);
+    nombreSommets->setVisible(true);
+    lblValeurMax->setVisible(true);
+    lblValeurMin->setVisible(true);
+    lblNom->setVisible(true);
+    lblSommets->setVisible(true);
+}
+
+void Fenetre::masquerBoutonsGraphe(){
+    boutonAfficher->setVisible(true);
+    boutonCreer->setVisible(false);
+    valeurMax->setVisible(false);
+    valeurMin->setVisible(false);
+    nomFichier->setVisible(false);
+    nombreSommets->setVisible(false);
+    lblValeurMax->setVisible(false);
+    lblValeurMin->setVisible(false);
+    lblNom->setVisible(false);
+    lblSommets->setVisible(false);
+}
 
 void Fenetre::creerUnGraphe() {
     std::string nom = nomFichier->text().toStdString();
@@ -202,8 +246,8 @@ void Fenetre::creerUnGraphe() {
     Graphe<InfoArc, InfoSommet> *g = new Graphe<InfoArc, InfoSommet>(nom);
     graphe = Graphe<InfoArc, InfoSommet>::genererGraphe(nbSommets, g, vMax, vMin);
     GprParser::genererInstance(graphe);
+    this->masquerBoutonsGraphe();
     this->init();
-
 }
 
 void Fenetre::init() {
