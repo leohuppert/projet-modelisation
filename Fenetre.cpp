@@ -138,13 +138,15 @@ void Fenetre::handleEvent() {
 void Fenetre::choixFichier() {
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Fichier GPR (*.gpr)");
 
-    // On récupère le graphe à partir du fichier gpr
-    Graphe<InfoArc, InfoSommet> *g;
-    g = GprParser::genererGraphe(fichier.toStdString().c_str());
+    if (fichier != "") {
+        // On récupère le graphe à partir du fichier gpr
+        Graphe<InfoArc, InfoSommet> *g;
+        g = GprParser::genererGraphe(fichier.toStdString().c_str());
 
-    graphe = g;
+        graphe = g;
 
-    this->init();
+        this->init();
+    }
 }
 
 void Fenetre::init() {
