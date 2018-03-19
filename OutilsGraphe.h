@@ -108,7 +108,7 @@ private:
      * @return
      */
     static bool estOrdonneParents(const Sommet<InfoSommet> *s1, const Sommet<InfoSommet> *s2) {
-        return s1->v.infoDijkstra.pere > s2->v.infoDijkstra.pere;
+        return s1->v.infoDijkstra.pere->clef > s2->v.infoDijkstra.pere->clef;
     }
 
     /**
