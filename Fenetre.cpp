@@ -189,6 +189,7 @@ void Fenetre::handleEvent() {
 }
 
 void Fenetre::choixFichier() {
+    this->masquerBoutonsGraphe();
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Fichier GPR (*.gpr)");
 
     if (fichier != "") {
